@@ -20,8 +20,10 @@ async function fetchApi<T>(
   const url = `${API_BASE}${endpoint}`;
 
   const config: RequestInit = {
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      ...options?.headers,
     },
     ...options,
   };
@@ -107,6 +109,40 @@ export const api = {
       return fetchApi<ApiResponse<PlaygroundResult>>('/playground/run', {
         method: 'POST',
         body: JSON.stringify(data),
+      });
+    },
+  },
+
+  auth: {
+    login: (email: string, password: string) => {
+      return fetchApi<ApiResponse<{ userId: string; name: string; email: string; avatarUrl?: string }>>('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+    },
+
+    register: (email: string, password: string, name: string) => {
+      return fetchApi<ApiResponse<null>>('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ email, password, name }),
+      });
+    },
+
+    logout: () => {
+      return fetchApi<ApiResponse<null>>('/auth/logout', {
+        method: 'GET',
+      });
+    },
+
+    getSession: () => {
+      return fetchApi<ApiResponse<{ userId: string; name: string; email: string; avatarUrl?: string }>>('/auth/session', {
+        method: 'GET',
+      });
+    },
+
+    renewToken: () => {
+      return fetchApi<ApiResponse<null>>('/auth/renew-token', {
+        method: 'GET',
       });
     },
   },

@@ -80,3 +80,17 @@ export interface PaginationParams {
   category?: string;
   search?: string;
 }
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  avatarUrl?: string;
+}
+
+export interface AuthSession {
+  userId: string;
+  email: string;
+  name: string;
+  avatarUrl?: string;
+}

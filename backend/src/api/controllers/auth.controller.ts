@@ -282,3 +282,21 @@ export const getAllSessions = async (req: Request, res: Response) => {
     return sendError(res, 400, error instanceof Error ? error.message : "Unknown error");
   }
 };
+
+export const getSession = async (req: Request, res: Response) => {
+  try {
+    const { success: checkUserSuccess, data: checkUserData, error: checkUserError } = await checkUser(req);
+    if (!checkUserSuccess) {
+      return sendError(res, 401, checkUserError || "Unauthorized");
+    }
+
+    return sendSuccess(res, {
+      userId: checkUserData?.id,
+      name: checkUserData?.name || "",
+      email: checkUserData?.email,
+      avatarUrl: checkUserData?.avatarUrl,
+    });
+  } catch (error) {
+    return sendError(res, 400, error instanceof Error ? error.message : "Unknown error");
+  }
+};

@@ -82,10 +82,13 @@ export default function PromptDetailPage() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{prompt.title}</h1>
             {prompt.forkedFrom && (
-              <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
+              <Link
+                href={`/prompts/${prompt.forkedFrom}`}
+                className="text-sm text-muted-foreground mt-1 flex items-center gap-1 hover:text-primary transition-colors"
+              >
                 <GitFork className="h-4 w-4" />
                 Forked from another prompt
-              </p>
+              </Link>
             )}
           </div>
           <div className="flex gap-2">
