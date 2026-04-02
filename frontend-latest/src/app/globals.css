@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
+
+  --color-background: oklch(1 0 0);
+  --color-foreground: oklch(0.13 0.03 252);
+
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.13 0.03 252);
+
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.13 0.03 252);
+
+  --color-primary: oklch(0.55 0.22 252);
+  --color-primary-foreground: oklch(0.98 0.01 252);
+
+  --color-secondary: oklch(0.96 0.01 252);
+  --color-secondary-foreground: oklch(0.21 0.06 247);
+
+  --color-muted: oklch(0.96 0.01 252);
+  --color-muted-foreground: oklch(0.55 0.02 252);
+
+  --color-accent: oklch(0.96 0.01 252);
+  --color-accent-foreground: oklch(0.21 0.06 247);
+
+  --color-destructive: oklch(0.63 0.24 25);
+  --color-destructive-foreground: oklch(0.98 0.01 25);
+
+  --color-border: oklch(0.92 0.01 252);
+  --color-input: oklch(0.92 0.01 252);
+  --color-ring: oklch(0.55 0.22 252);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --radius: 0.5rem;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+}
+
+@layer utilities {
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      max-width: 640px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      max-width: 768px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      max-width: 1024px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container {
+      max-width: 1280px;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .container {
+      max-width: 1400px;
+    }
+  }
+}
