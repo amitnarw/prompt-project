@@ -1,4 +1,4 @@
-import type { ResolverResult } from "./types.js";
+import type { ResolverResult } from './types.js';
 
 export async function resolveAI(params: {
   prompt: string;
@@ -6,7 +6,7 @@ export async function resolveAI(params: {
   force?: boolean;
 }): Promise<ResolverResult> {
   return {
-    source: "error",
-    message: "AI resolver not implemented - add your own implementation",
+    source: 'error',
+    message: 'AI resolver not implemented - add your own implementation',
   };
 }

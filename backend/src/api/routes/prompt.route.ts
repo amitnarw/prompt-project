@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   getPrompts,
   getPromptById,
@@ -9,27 +9,36 @@ import {
   downvotePrompt,
   forkPrompt,
   getPromptVersions,
-} from "@/api/controllers/prompt.controller.js";
-import { checkAuthentication } from "@/api/middlewares/checkAuthentication.js";
-import { decyptPayload } from "@/api/middlewares/decyptPayload.js";
+  verifyPrompt,
+  unverifyPrompt,
+} from '@/api/controllers/prompt.controller.js';
+import { checkAuthentication } from '@/api/middlewares/checkAuthentication.js';
+import { checkAuthorization } from '@/api/middlewares/checkAuthorization.js';
 import {
   createPromptSchema,
   updatePromptSchema,
   forkPromptSchema,
   idParamSchema,
   paginationQuerySchema,
-} from "../../../src/middleware/validateRequest.js";
+} from '../../../src/middleware/validateRequest.js';
 
-const router = Router();
+const router: Router = Router();
 
-router.get("/", checkAuthentication, getPrompts);
-router.get("/:id", checkAuthentication, getPromptById);
-router.post("/", checkAuthentication, decyptPayload, createPrompt);
-router.put("/:id", checkAuthentication, decyptPayload, updatePrompt);
-router.delete("/:id", checkAuthentication, deletePrompt);
-router.post("/:id/upvote", checkAuthentication, upvotePrompt);
-router.post("/:id/downvote", checkAuthentication, downvotePrompt);
-router.post("/:id/fork", checkAuthentication, decyptPayload, forkPrompt);
-router.get("/:id/versions", checkAuthentication, getPromptVersions);
+// Public routes - no authentication required
+router.get('/', getPrompts);
+router.get('/:id', getPromptById);
+router.get('/:id/versions', getPromptVersions);
+
+// Protected routes - require authentication
+router.post('/', checkAuthentication, createPrompt);
+router.put('/:id', checkAuthentication, updatePrompt);
+router.delete('/:id', checkAuthentication, deletePrompt);
+router.post('/:id/upvote', checkAuthentication, upvotePrompt);
+router.post('/:id/downvote', checkAuthentication, downvotePrompt);
+router.post('/:id/fork', checkAuthentication, forkPrompt);
+
+// Admin-only: verify/unverify prompts
+router.post('/:id/verify', checkAuthentication, checkAuthorization('prompt', 'canUpdate'), verifyPrompt);
+router.delete('/:id/verify', checkAuthentication, checkAuthorization('prompt', 'canUpdate'), unverifyPrompt);
 
 export default router;

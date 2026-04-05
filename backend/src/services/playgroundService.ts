@@ -1,7 +1,21 @@
-import { PlaygroundInput } from '../types/index.js';
+import type { PlaygroundInput } from '../types/index.js';
+import prisma from '../utils/prisma.js';
 
 export class PlaygroundService {
-  async executePrompt(input: PlaygroundInput) {
+  async executePrompt(input: PlaygroundInput, userId: string) {
+    // Log usage
+    await prisma.usageLog.create({
+      data: {
+        userId,
+        module: 'PLAYGROUND',
+        cost: 0,
+        meta: {
+          promptLength: input.prompt.length,
+          variablesCount: input.variables ? Object.keys(input.variables).length : 0,
+        },
+      },
+    });
+
     let processedPrompt = input.prompt;
 
     if (input.variables) {
@@ -32,19 +46,39 @@ export class PlaygroundService {
   private detectIntent(prompt: string): string {
     const lowerPrompt = prompt.toLowerCase();
 
-    if (lowerPrompt.includes('write') || lowerPrompt.includes('create') || lowerPrompt.includes('generate')) {
+    if (
+      lowerPrompt.includes('write') ||
+      lowerPrompt.includes('create') ||
+      lowerPrompt.includes('generate')
+    ) {
       return 'content creation';
     }
-    if (lowerPrompt.includes('explain') || lowerPrompt.includes('what') || lowerPrompt.includes('how')) {
+    if (
+      lowerPrompt.includes('explain') ||
+      lowerPrompt.includes('what') ||
+      lowerPrompt.includes('how')
+    ) {
       return 'explanation/education';
     }
-    if (lowerPrompt.includes('code') || lowerPrompt.includes('programming') || lowerPrompt.includes('function')) {
+    if (
+      lowerPrompt.includes('code') ||
+      lowerPrompt.includes('programming') ||
+      lowerPrompt.includes('function')
+    ) {
       return 'code generation';
     }
-    if (lowerPrompt.includes('analyze') || lowerPrompt.includes('review') || lowerPrompt.includes('evaluate')) {
+    if (
+      lowerPrompt.includes('analyze') ||
+      lowerPrompt.includes('review') ||
+      lowerPrompt.includes('evaluate')
+    ) {
       return 'analysis';
     }
-    if (lowerPrompt.includes('list') || lowerPrompt.includes(' brainstorm') || lowerPrompt.includes('ideas')) {
+    if (
+      lowerPrompt.includes('list') ||
+      lowerPrompt.includes(' brainstorm') ||
+      lowerPrompt.includes('ideas')
+    ) {
       return 'brainstorming';
     }
 
@@ -54,7 +88,8 @@ export class PlaygroundService {
   private calculateComplexity(prompt: string): string {
     const wordCount = prompt.split(/\s+/).length;
     const hasVariables = prompt.includes('{{');
-    const hasConstraints = prompt.includes('must') || prompt.includes('should') || prompt.includes('need');
+    const hasConstraints =
+      prompt.includes('must') || prompt.includes('should') || prompt.includes('need');
 
     if (wordCount > 100 && hasVariables && hasConstraints) {
       return 'High';

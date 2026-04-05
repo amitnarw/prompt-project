@@ -1,30 +1,30 @@
-import type { Request, Response } from "express";
-import { createChannel, createSession, type Channel } from "better-sse";
-import Redis from "ioredis";
-import { redisConnection } from "@/config/redis";
-import { redis as pubClient } from "@/infra/redis";
-import { logger } from "@/utils/logger";
+import type { Request, Response } from 'express';
+import { createChannel, createSession, type Channel } from 'better-sse';
+import Redis from 'ioredis';
+import { redisConnection } from '@/config/redis';
+import { redis as pubClient } from '@/infra/redis';
+import { logger } from '@/utils/logger';
 
 const userChannels = new Map<string, Channel>();
 
 const subClient = new Redis(redisConnection);
-const REDIS_CHANNEL = "sse:events";
+const REDIS_CHANNEL = 'sse:events';
 
-subClient.subscribe(REDIS_CHANNEL, (err) => {
+subClient.subscribe(REDIS_CHANNEL, err => {
   if (err) {
-    logger.error("[SSE:Manager] Redis subscribe failed: %s", err.message);
+    logger.error('[SSE:Manager] Redis subscribe failed: %s', err.message);
   } else {
-    logger.info("[SSE:Manager] Subscribed to Redis channel: %s", REDIS_CHANNEL);
+    logger.info('[SSE:Manager] Subscribed to Redis channel: %s', REDIS_CHANNEL);
   }
 });
 
-subClient.on("message", (channel, message) => {
+subClient.on('message', (channel, message) => {
   if (channel !== REDIS_CHANNEL) return;
 
   try {
     const { userId, event, data } = JSON.parse(message);
 
-    if (userId === "_BROADCAST_") {
+    if (userId === '_BROADCAST_') {
       for (const userChannel of userChannels.values()) {
         userChannel.broadcast(data, event);
       }
@@ -35,7 +35,7 @@ subClient.on("message", (channel, message) => {
       }
     }
   } catch (error) {
-    logger.error("[SSE:Manager] Failed to handle Redis message: %o", error);
+    logger.error('[SSE:Manager] Failed to handle Redis message: %o', error);
   }
 });
 
@@ -49,11 +49,11 @@ export const registerClient = async (userId: string, req: Request, res: Response
   const userChannel = userChannels.get(userId)!;
   userChannel.register(session);
 
-  session.push({ message: "SSE connected", userId }, "connected");
+  session.push({ message: 'SSE connected', userId }, 'connected');
 
-  logger.debug("[SSE:Manager] User %s connected", userId);
+  logger.debug('[SSE:Manager] User %s connected', userId);
 
-  session.on("disconnected", () => {
+  session.on('disconnected', () => {
     if (userChannel.sessionCount === 0) {
       userChannels.delete(userId);
     }
@@ -63,17 +63,15 @@ export const registerClient = async (userId: string, req: Request, res: Response
 };
 
 export const sendToUser = (userId: string, event: string, data: unknown): void => {
-  pubClient
-    .publish(REDIS_CHANNEL, JSON.stringify({ userId, event, data }))
-    .catch((err) => {
-      logger.error("[SSE:Manager] Redis publish failed: %s", err.message);
-    });
+  pubClient.publish(REDIS_CHANNEL, JSON.stringify({ userId, event, data })).catch(err => {
+    logger.error('[SSE:Manager] Redis publish failed: %s', err.message);
+  });
 };
 
 export const broadcast = (event: string, data: unknown): void => {
   pubClient
-    .publish(REDIS_CHANNEL, JSON.stringify({ userId: "_BROADCAST_", event, data }))
-    .catch((err) => logger.error("[SSE:Manager] Redis broadcast publish failed: %s", err.message));
+    .publish(REDIS_CHANNEL, JSON.stringify({ userId: '_BROADCAST_', event, data }))
+    .catch(err => logger.error('[SSE:Manager] Redis broadcast publish failed: %s', err.message));
 };
 
 export const isConnected = (userId: string): boolean => {
@@ -90,9 +88,9 @@ export const subscribeToJob = async (jobId: string, userId: string): Promise<voi
     const waiterTtl = Number(process.env.REDIS_TTL_SSE_WAITERS) || 600;
     await redis.sadd(key, userId);
     await redis.expire(key, waiterTtl);
-    logger.debug("[SSE:Manager] User %s subscribed to jobId: %s", userId, jobId);
+    logger.debug('[SSE:Manager] User %s subscribed to jobId: %s', userId, jobId);
   } catch (error) {
-    logger.error("[SSE:Manager] subscribeToJob failed: %o", error);
+    logger.error('[SSE:Manager] subscribeToJob failed: %o', error);
   }
 };
 
@@ -108,7 +106,7 @@ export const notifyWaiters = async (jobId: string, event: string, data: unknown)
       return;
     }
 
-    logger.info("[SSE:Manager] Notifying %d waiters for jobId: %s", waiters.length, jobId);
+    logger.info('[SSE:Manager] Notifying %d waiters for jobId: %s', waiters.length, jobId);
 
     for (const waiterId of waiters) {
       sendToUser(waiterId, event, data);
@@ -116,7 +114,7 @@ export const notifyWaiters = async (jobId: string, event: string, data: unknown)
 
     await redis.del(key);
   } catch (error) {
-    logger.error("[SSE:Manager] notifyWaiters failed: %o", error);
+    logger.error('[SSE:Manager] notifyWaiters failed: %o', error);
   }
 };
 

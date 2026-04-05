@@ -1,11 +1,10 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import { api } from '@/lib/api';
-import { User } from '@/types';
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { authClient } from "@/lib/auth-client";
 
 interface AuthContextType {
-  user: User | null;
+  user: { id: string; email: string; name: string; image?: string } | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
@@ -17,19 +16,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthContextType["user"]>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshSession = useCallback(async () => {
     try {
-      const response = await api.auth.getSession();
-      if (response.success && response.data) {
-        setUser({
-          id: response.data.userId,
-          email: response.data.email,
-          name: response.data.name,
-          avatarUrl: response.data.avatarUrl,
-        });
+      const session = await authClient.getSession();
+      if (session && session.data && "user" in session.data) {
+        setUser(session.data.user as AuthContextType["user"]);
       } else {
         setUser(null);
       }
@@ -45,32 +39,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refreshSession]);
 
   const login = async (email: string, password: string) => {
-    const response = await api.auth.login(email, password);
-    if (response.success && response.data) {
-      setUser({
-        id: response.data.userId,
-        email: response.data.email,
-        name: response.data.name,
-        avatarUrl: response.data.avatarUrl,
-      });
-    } else {
-      throw new Error(response.error || 'Login failed');
-    }
+    const { error } = await authClient.signIn.email({ email, password });
+    if (error) throw new Error(error.message);
+    await refreshSession();
   };
 
   const register = async (email: string, password: string, name: string) => {
-    const response = await api.auth.register(email, password, name);
-    if (!response.success) {
-      throw new Error(response.error || 'Registration failed');
-    }
+    const { error } = await authClient.signUp.email({ email, password, name });
+    if (error) throw new Error(error.message);
   };
 
   const logout = async () => {
-    try {
-      await api.auth.logout();
-    } finally {
-      setUser(null);
-    }
+    await authClient.signOut();
+    setUser(null);
   };
 
   return (
@@ -93,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuthContext() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuthContext must be used within an AuthProvider');
+    throw new Error("useAuthContext must be used within an AuthProvider");
   }
   return context;
 }

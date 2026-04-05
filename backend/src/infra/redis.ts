@@ -1,19 +1,19 @@
-import Redis from "ioredis";
-import { redisConnection } from "@/config/redis";
+import Redis from 'ioredis';
+import { redisConnection } from '@/config/redis';
 
 export const redis = new Redis({
   ...redisConnection,
   maxRetriesPerRequest: 3,
   enableReadyCheck: true,
-  retryStrategy: (times) => Math.min(times * 50, 2000),
+  retryStrategy: (times: number) => Math.min(times * 50, 2000),
 });
 
-redis.on("connect", () => {
+redis.on('connect', () => {
   // Redis connected
 });
 
-redis.on("error", (err) => {
-  if (err.code === "ECONNREFUSED") {
+redis.on('error', (err: Error) => {
+  if ((err as any).code === 'ECONNREFUSED') {
     // Handled in server.ts startup
   }
 });

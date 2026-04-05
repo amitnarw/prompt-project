@@ -94,8 +94,8 @@ export default function PromptDetailPage() {
           <div className="flex gap-2">
             <VoteButtons
               promptId={prompt.id}
-              upvotes={prompt.upvotes}
-              downvotes={prompt.downvotes}
+              worksCount={prompt.worksCount}
+              doesntWorkCount={prompt.doesntWorkCount}
             />
           </div>
         </div>

@@ -1,9 +1,9 @@
-import "dotenv/config";
-import { app } from "./app.js";
-import { logger } from "./utils/logger.js";
+import 'dotenv/config';
+import { app } from './app.js';
+import { logger } from './utils/logger.js';
 
-const PORT = parseInt(process.env.PORT || "5000");
-const NODE_ENV = process.env.NODE_ENV || "development";
+const PORT = parseInt(process.env.PORT || '5000');
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
 async function startServer() {
   app.listen(PORT, () => {
@@ -14,7 +14,7 @@ async function startServer() {
   });
 }
 
-startServer().catch((err) => {
-  logger.error("Failed to start server:", err);
+startServer().catch(err => {
+  logger.error('Failed to start server:', err);
   process.exit(1);
 });

@@ -5,13 +5,18 @@ export interface Prompt {
   content: string;
   category: string;
   tags: string[];
-  upvotes: number;
-  downvotes: number;
+  worksCount: number;
+  doesntWorkCount: number;
   forkedFrom: string | null;
   createdBy: string;
   createdAt: string;
   updatedAt: string;
   versions?: PromptVersion[];
+  isVerified?: boolean;
+  verifiedAt?: string | null;
+  verifiedBy?: string | null;
+  usageCount?: number;
+  modelType?: string | null;
 }
 
 export interface PromptVersion {
@@ -79,6 +84,43 @@ export interface PaginationParams {
   limit?: number;
   category?: string;
   search?: string;
+}
+
+export interface AdvancedFilterParams {
+  page?: number;
+  limit?: number;
+  category?: string;
+  search?: string;
+  tags?: string[];
+  sortBy?: 'newest' | 'oldest' | 'mostWorks' | 'mostDoesntWork' | 'alphabetical' | 'rating';
+  isVerified?: boolean;
+  modelType?: string;
+  bookmarkedBy?: string;
+  collectionId?: string;
+}
+
+export interface Bookmark {
+  id: string;
+  userId: string;
+  promptId: string;
+  createdAt: string;
+}
+
+export interface Collection {
+  id: string;
+  userId: string;
+  name: string;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+  promptCount?: number;
+}
+
+export interface CollectionPrompt {
+  id: string;
+  collectionId: string;
+  promptId: string;
+  addedAt: string;
 }
 
 export interface User {

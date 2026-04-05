@@ -1,6 +1,6 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-const router = Router();
+const router: Router = Router();
 
 // Placeholder SEO routes - add your own SEO logic here
 // router.use("/keyword", keywordRouter);

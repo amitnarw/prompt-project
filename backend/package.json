@@ -8,45 +8,49 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc --build",
     "start": "node dist/server.js",
+    "db:validate": "prisma validate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "seed": "tsx prisma/seed/index.ts",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "prepare": "husky install"
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "prepare": "husky"
   },
   "dependencies": {
-    "@prisma/client": "^6.19.3",
+    "@better-auth/core": "^1.5.6",
+    "@better-auth/prisma-adapter": "^1.5.6",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
     "argon2": "^0.31.0",
     "axios": "^1.7.0",
+    "better-auth": "^1.5.6",
+    "better-sse": "^0.16.0",
+    "bullmq": "^5.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "helmet": "^8.1.0",
+    "ioredis": "^5.0.0",
     "jose": "^5.9.0",
-    "jsonwebtoken": "^9.0.2",
-    "morgan": "^1.10.1",
-    "winston": "^3.14.0",
-    "zod": "^3.25.76"
+    "winston": "^3.14.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/jsonwebtoken": "^9.0.6",
-    "@types/morgan": "^1.9.10",
     "@types/node": "^25.5.0",
     "husky": "^9.1.0",
     "lint-staged": "^15.2.0",
     "prettier": "^3.3.0",
-    "prisma": "^6.19.3",
+    "prisma": "^7.2.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "*.{ts,tsx,js,jsx,json,md}": [
+      "prettier --write"
+    ]
   }
 }

@@ -1,13 +1,9 @@
-import { Router } from "express";
-import { login, logout, register, renewToken, getSession } from "@/api/controllers/auth.controller.js";
-import { checkAuthenticationRefresh } from "@/api/middlewares/checkAuthentication.js";
+import { Router, type Router as ExpressRouter } from "express";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "@/lib/auth.js";
 
-const router = Router();
+const router: ExpressRouter = Router();
 
-router.post("/login", login);
-router.post("/register", register);
-router.get("/logout", checkAuthenticationRefresh, logout);
-router.get("/renew-token", checkAuthenticationRefresh, renewToken);
-router.get("/session", checkAuthenticationRefresh, getSession);
+router.use(toNodeHandler(auth));
 
 export default router;

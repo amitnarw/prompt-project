@@ -4,7 +4,7 @@ export interface ResolverResult {
   message?: string;
 }
 
-export type ResolverSource = "cache" | "db" | "queued" | "error";
+export type ResolverSource = 'cache' | 'db' | 'queued' | 'error';
 
 export interface ResolverContext {
   keyword?: string;

@@ -2,11 +2,23 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
+import { authClient } from '@/lib/auth-client';
 import { Button } from '@/components/ui/button';
-import { Lightbulb, Bot, User, LogOut } from 'lucide-react';
+import { Lightbulb, Bot, User, LogOut, Bookmark, FolderOpen } from 'lucide-react';
+import { toast } from 'sonner';
 
 export function Header() {
   const { user, isAuthenticated, isLoading, logout } = useAuth();
+
+  const handleGoogleLogin = async () => {
+    const { error } = await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: 'http://localhost:3000/',
+    });
+    if (error) {
+      toast.error(error.message || 'Failed to login with Google');
+    }
+  };
 
   return (
     <header className="border-b">
@@ -19,6 +31,22 @@ export function Header() {
           <Link href="/">
             <Button variant="ghost">Browse</Button>
           </Link>
+          {isAuthenticated && (
+            <>
+              <Link href="/bookmarks">
+                <Button variant="ghost" className="gap-2">
+                  <Bookmark className="h-4 w-4" />
+                  Bookmarks
+                </Button>
+              </Link>
+              <Link href="/collections">
+                <Button variant="ghost" className="gap-2">
+                  <FolderOpen className="h-4 w-4" />
+                  Collections
+                </Button>
+              </Link>
+            </>
+          )}
           <Link href="/playground">
             <Button variant="ghost" className="gap-2">
               <Bot className="h-4 w-4" />
@@ -44,14 +72,9 @@ export function Header() {
           ) : isLoading ? (
             <span className="text-sm text-muted-foreground">Loading...</span>
           ) : (
-            <>
-              <Link href="/login">
-                <Button variant="ghost">Login</Button>
-              </Link>
-              <Link href="/register">
-                <Button variant="outline">Register</Button>
-              </Link>
-            </>
+            <Button variant="outline" onClick={handleGoogleLogin}>
+              Login with Google
+            </Button>
           )}
         </nav>
       </div>

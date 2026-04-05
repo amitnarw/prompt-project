@@ -1,12 +1,12 @@
-import { type Request, type Response } from "express";
-import { prismaClient } from "@/lib/prismaClient";
-import { sendError, sendSuccess } from "@/utils/response";
+import { type Request, type Response } from 'express';
+import { prismaClient } from '@/lib/prismaClient';
+import { sendError, sendSuccess } from '@/utils/response';
 
 export const getSession = async (req: Request, res: Response) => {
   try {
     const userId = req?.userId;
     if (!userId) {
-      return sendError(res, 401, "Unauthorized request");
+      return sendError(res, 401, 'Unauthorized request');
     }
 
     const userData = await prismaClient?.user?.findFirst({
@@ -36,10 +36,10 @@ export const getSession = async (req: Request, res: Response) => {
     });
 
     if (!userData) {
-      return sendError(res, 404, "User not found");
+      return sendError(res, 404, 'User not found');
     }
-    return sendSuccess(res, userData, "ok");
+    return sendSuccess(res, userData, 'ok');
   } catch (error) {
-    return sendError(res, 400, error instanceof Error ? error.message : "Unknown error");
+    return sendError(res, 400, error instanceof Error ? error.message : 'Unknown error');
   }
 };

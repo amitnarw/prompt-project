@@ -1,4 +1,4 @@
-import type { ResolverResult } from "./types.js";
+import type { ResolverResult } from './types.js';
 
 export async function resolveKeyword(params: {
   keyword: string;
@@ -8,8 +8,8 @@ export async function resolveKeyword(params: {
   force?: boolean;
 }): Promise<ResolverResult> {
   return {
-    source: "error",
-    message: "Keyword resolver not implemented - add your own implementation",
+    source: 'error',
+    message: 'Keyword resolver not implemented - add your own implementation',
   };
 }
 
@@ -23,8 +23,8 @@ export async function resolveKeywordRefiner(params: {
   force?: boolean;
 }): Promise<ResolverResult> {
   return {
-    source: "error",
-    message: "Keyword refiner not implemented - add your own implementation",
+    source: 'error',
+    message: 'Keyword refiner not implemented - add your own implementation',
   };
 }
 
@@ -38,7 +38,7 @@ export async function resolveKeywordResearch(params: {
   force?: boolean;
 }): Promise<ResolverResult> {
   return {
-    source: "error",
-    message: "Keyword research not implemented - add your own implementation",
+    source: 'error',
+    message: 'Keyword research not implemented - add your own implementation',
   };
 }

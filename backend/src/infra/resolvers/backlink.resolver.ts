@@ -1,4 +1,4 @@
-import type { ResolverResult } from "./types.js";
+import type { ResolverResult } from './types.js';
 
 export async function resolveBacklinks(params: {
   target: string;
@@ -6,7 +6,7 @@ export async function resolveBacklinks(params: {
   force?: boolean;
 }): Promise<ResolverResult> {
   return {
-    source: "error",
-    message: "Backlink resolver not implemented - add your own implementation",
+    source: 'error',
+    message: 'Backlink resolver not implemented - add your own implementation',
   };
 }

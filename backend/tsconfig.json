@@ -5,7 +5,7 @@
     "moduleResolution": "bundler",
     "lib": ["ES2022"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -18,9 +18,11 @@
     "composite": true,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/prisma/*": ["./prisma/generated/prisma/*"]
     },
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "ignoreDeprecations": "6.0"
   },
   "tsc-alias": {
     "resolveFullPaths": true

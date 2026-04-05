@@ -9,6 +9,9 @@ import {
   ApiResponse,
   PaginatedResponse,
   PaginationParams,
+  AdvancedFilterParams,
+  Bookmark,
+  Collection,
 } from '@/types';
 
 const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL + '/api';
@@ -40,12 +43,18 @@ async function fetchApi<T>(
 
 export const api = {
   prompts: {
-    getAll: (params?: PaginationParams): Promise<PaginatedResponse<Prompt>> => {
+    getAll: (params?: AdvancedFilterParams): Promise<PaginatedResponse<Prompt>> => {
       const searchParams = new URLSearchParams();
       if (params?.page) searchParams.set('page', String(params.page));
       if (params?.limit) searchParams.set('limit', String(params.limit));
       if (params?.category) searchParams.set('category', params.category);
       if (params?.search) searchParams.set('search', params.search);
+      if (params?.tags?.length) searchParams.set('tags', params.tags.join(','));
+      if (params?.sortBy) searchParams.set('sortBy', params.sortBy);
+      if (params?.isVerified !== undefined) searchParams.set('isVerified', String(params.isVerified));
+      if (params?.modelType) searchParams.set('modelType', params.modelType);
+      if (params?.bookmarkedBy) searchParams.set('bookmarkedBy', params.bookmarkedBy);
+      if (params?.collectionId) searchParams.set('collectionId', params.collectionId);
 
       const query = searchParams.toString();
       return fetchApi<PaginatedResponse<Prompt>>(
@@ -102,6 +111,14 @@ export const api = {
     getVersions: (id: string): Promise<ApiResponse<PromptVersion[]>> => {
       return fetchApi<ApiResponse<PromptVersion[]>>(`/prompts/${id}/versions`);
     },
+
+    verify: (id: string): Promise<ApiResponse<Prompt>> => {
+      return fetchApi<ApiResponse<Prompt>>(`/prompts/${id}/verify`, { method: 'POST' });
+    },
+
+    unverify: (id: string): Promise<ApiResponse<Prompt>> => {
+      return fetchApi<ApiResponse<Prompt>>(`/prompts/${id}/verify`, { method: 'DELETE' });
+    },
   },
 
   playground: {
@@ -113,36 +130,67 @@ export const api = {
     },
   },
 
-  auth: {
-    login: (email: string, password: string) => {
-      return fetchApi<ApiResponse<{ userId: string; name: string; email: string; avatarUrl?: string }>>('/auth/login', {
+  bookmarks: {
+    add: (promptId: string): Promise<ApiResponse<Bookmark>> => {
+      return fetchApi<ApiResponse<Bookmark>>('/bookmarks', {
         method: 'POST',
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ promptId }),
       });
     },
 
-    register: (email: string, password: string, name: string) => {
-      return fetchApi<ApiResponse<null>>('/auth/register', {
+    remove: (promptId: string): Promise<ApiResponse<void>> => {
+      return fetchApi<ApiResponse<void>>(`/bookmarks/${promptId}`, { method: 'DELETE' });
+    },
+
+    getAll: (page?: number): Promise<PaginatedResponse<Prompt>> => {
+      const searchParams = new URLSearchParams();
+      if (page) searchParams.set('page', String(page));
+      const query = searchParams.toString();
+      return fetchApi<PaginatedResponse<Prompt>>(`/bookmarks${query ? `?${query}` : ''}`);
+    },
+
+    check: (promptId: string): Promise<ApiResponse<{ isBookmarked: boolean }>> => {
+      return fetchApi<ApiResponse<{ isBookmarked: boolean }>>(`/bookmarks/${promptId}/check`);
+    },
+  },
+
+  collections: {
+    create: (data: { name: string; description?: string }): Promise<ApiResponse<Collection>> => {
+      return fetchApi<ApiResponse<Collection>>('/collections', {
         method: 'POST',
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify(data),
       });
     },
 
-    logout: () => {
-      return fetchApi<ApiResponse<null>>('/auth/logout', {
-        method: 'GET',
+    update: (id: string, data: { name?: string; description?: string }): Promise<ApiResponse<Collection>> => {
+      return fetchApi<ApiResponse<Collection>>(`/collections/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
       });
     },
 
-    getSession: () => {
-      return fetchApi<ApiResponse<{ userId: string; name: string; email: string; avatarUrl?: string }>>('/auth/session', {
-        method: 'GET',
+    delete: (id: string): Promise<ApiResponse<void>> => {
+      return fetchApi<ApiResponse<void>>(`/collections/${id}`, { method: 'DELETE' });
+    },
+
+    getAll: (): Promise<ApiResponse<Collection[]>> => {
+      return fetchApi<ApiResponse<Collection[]>>('/collections');
+    },
+
+    getById: (id: string): Promise<ApiResponse<Collection & { prompts: { prompt: Prompt }[] }>> => {
+      return fetchApi<ApiResponse<Collection & { prompts: { prompt: Prompt }[] }>>(`/collections/${id}`);
+    },
+
+    addPrompt: (collectionId: string, promptId: string): Promise<ApiResponse<void>> => {
+      return fetchApi<ApiResponse<void>>(`/collections/${collectionId}/prompts`, {
+        method: 'POST',
+        body: JSON.stringify({ promptId }),
       });
     },
 
-    renewToken: () => {
-      return fetchApi<ApiResponse<null>>('/auth/renew-token', {
-        method: 'GET',
+    removePrompt: (collectionId: string, promptId: string): Promise<ApiResponse<void>> => {
+      return fetchApi<ApiResponse<void>>(`/collections/${collectionId}/prompts/${promptId}`, {
+        method: 'DELETE',
       });
     },
   },

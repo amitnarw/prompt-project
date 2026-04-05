@@ -4,71 +4,71 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
-import { ThumbsUp, ThumbsDown } from 'lucide-react';
+import { CheckCircle, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 interface VoteButtonsProps {
   promptId: string;
-  upvotes: number;
-  downvotes: number;
+  worksCount: number;
+  doesntWorkCount: number;
   onVote?: () => void;
 }
 
-export function VoteButtons({ promptId, upvotes, downvotes, onVote }: VoteButtonsProps) {
-  const [localUpvotes, setLocalUpvotes] = useState(upvotes);
-  const [localDownvotes, setLocalDownvotes] = useState(downvotes);
-  const [userVote, setUserVote] = useState<'up' | 'down' | null>(null);
+export function VoteButtons({ promptId, worksCount, doesntWorkCount, onVote }: VoteButtonsProps) {
+  const [localWorksCount, setLocalWorksCount] = useState(worksCount);
+  const [localDoesntWorkCount, setLocalDoesntWorkCount] = useState(doesntWorkCount);
+  const [userVote, setUserVote] = useState<'works' | 'doesntWork' | null>(null);
 
   const queryClient = useQueryClient();
 
-  const upvoteMutation = useMutation({
+  const markWorksMutation = useMutation({
     mutationFn: () => api.prompts.upvote(promptId),
     onSuccess: (response) => {
       if (response.data) {
-        setLocalUpvotes(response.data.newVoteCount);
-        setUserVote(response.data.action === 'removed' ? null : 'up');
+        setLocalWorksCount(response.data.newVoteCount);
+        setUserVote(response.data.action === 'removed' ? null : 'works');
         onVote?.();
       }
     },
     onError: () => {
-      toast.error('Failed to upvote');
+      toast.error('Failed to mark as works');
     },
   });
 
-  const downvoteMutation = useMutation({
+  const markDoesntWorkMutation = useMutation({
     mutationFn: () => api.prompts.downvote(promptId),
     onSuccess: (response) => {
       if (response.data) {
-        setLocalDownvotes(response.data.newVoteCount);
-        setUserVote(response.data.action === 'removed' ? null : 'down');
+        setLocalDoesntWorkCount(response.data.newVoteCount);
+        setUserVote(response.data.action === 'removed' ? null : 'doesntWork');
         onVote?.();
       }
     },
     onError: () => {
-      toast.error('Failed to downvote');
+      toast.error('Failed to mark as doesn\'t work');
     },
   });
 
-  const handleUpvote = () => {
-    if (userVote === 'up') {
-      upvoteMutation.mutate();
-    } else if (userVote === 'down') {
-      downvoteMutation.mutate();
-      setTimeout(() => upvoteMutation.mutate(), 50);
+  const handleMarkWorks = () => {
+    if (userVote === 'works') {
+      markWorksMutation.mutate();
+    } else if (userVote === 'doesntWork') {
+      markDoesntWorkMutation.mutate();
+      setTimeout(() => markWorksMutation.mutate(), 50);
     } else {
-      upvoteMutation.mutate();
+      markWorksMutation.mutate();
     }
   };
 
-  const handleDownvote = () => {
-    if (userVote === 'down') {
-      downvoteMutation.mutate();
-    } else if (userVote === 'up') {
-      upvoteMutation.mutate();
-      setTimeout(() => downvoteMutation.mutate(), 50);
+  const handleMarkDoesntWork = () => {
+    if (userVote === 'doesntWork') {
+      markDoesntWorkMutation.mutate();
+    } else if (userVote === 'works') {
+      markWorksMutation.mutate();
+      setTimeout(() => markDoesntWorkMutation.mutate(), 50);
     } else {
-      downvoteMutation.mutate();
+      markDoesntWorkMutation.mutate();
     }
   };
 
@@ -77,28 +77,30 @@ export function VoteButtons({ promptId, upvotes, downvotes, onVote }: VoteButton
       <Button
         variant="ghost"
         size="sm"
-        onClick={handleUpvote}
-        disabled={upvoteMutation.isPending}
+        onClick={handleMarkWorks}
+        disabled={markWorksMutation.isPending}
         className={cn(
           'gap-1',
-          userVote === 'up' && 'text-green-600 hover:text-green-700'
+          userVote === 'works' && 'text-green-600 hover:text-green-700'
         )}
       >
-        <ThumbsUp className="h-4 w-4" />
-        <span>{localUpvotes}</span>
+        <CheckCircle className="h-4 w-4" />
+        <span>Works</span>
+        <span className="ml-1 text-xs">({localWorksCount})</span>
       </Button>
       <Button
         variant="ghost"
         size="sm"
-        onClick={handleDownvote}
-        disabled={downvoteMutation.isPending}
+        onClick={handleMarkDoesntWork}
+        disabled={markDoesntWorkMutation.isPending}
         className={cn(
           'gap-1',
-          userVote === 'down' && 'text-red-600 hover:text-red-700'
+          userVote === 'doesntWork' && 'text-red-600 hover:text-red-700'
         )}
       >
-        <ThumbsDown className="h-4 w-4" />
-        <span>{localDownvotes}</span>
+        <XCircle className="h-4 w-4" />
+        <span>Doesn&apos;t Work</span>
+        <span className="ml-1 text-xs">({localDoesntWorkCount})</span>
       </Button>
     </div>
   );

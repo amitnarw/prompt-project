@@ -1,6 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { ZodError } from 'zod';
-import { Prisma } from '@prisma/client';
+import { type Request, type Response, type NextFunction } from 'express';
+import { Prisma } from '../../prisma/generated/prisma/client';
 
 export class AppError extends Error {
   statusCode: number;
@@ -24,20 +23,6 @@ export const errorHandler = (
     res.status(err.statusCode).json({
       success: false,
       error: err.message,
-    });
-    return;
-  }
-
-  if (err instanceof ZodError) {
-    const errors = err.errors.map((e) => ({
-      field: e.path.join('.'),
-      message: e.message,
-    }));
-
-    res.status(400).json({
-      success: false,
-      error: 'Validation failed',
-      details: errors,
     });
     return;
   }
@@ -76,16 +61,11 @@ export const errorHandler = (
 
   res.status(500).json({
     success: false,
-    error: process.env.NODE_ENV === 'production'
-      ? 'Internal server error'
-      : err.message,
+    error: process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message,
   });
 };
 
-export const notFoundHandler = (
-  req: Request,
-  res: Response
-): void => {
+export const notFoundHandler = (req: Request, res: Response): void => {
   res.status(404).json({
     success: false,
     error: `Route ${req.method} ${req.path} not found`,

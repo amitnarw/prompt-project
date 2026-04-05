@@ -1,4 +1,4 @@
-import type { ResolverResult } from "./types.js";
+import type { ResolverResult } from './types.js';
 
 export async function resolveSerp(params: {
   keyword: string;
@@ -9,7 +9,7 @@ export async function resolveSerp(params: {
   force?: boolean;
 }): Promise<ResolverResult> {
   return {
-    source: "error",
-    message: "SERP resolver not implemented - add your own implementation",
+    source: 'error',
+    message: 'SERP resolver not implemented - add your own implementation',
   };
 }

@@ -9,4 +9,6 @@ export {
   downvotePrompt,
   forkPrompt,
   getPromptVersions,
-} from "../../controllers/promptController.js";
+  verifyPrompt,
+  unverifyPrompt,
+} from '../../controllers/promptController.js';

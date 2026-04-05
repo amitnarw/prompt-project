@@ -1,6 +1,6 @@
-import { keys } from "@/infra/keys";
-import { keywordQueue } from "@/infra/queues";
-import { logger } from "@/utils/logger";
+import { keys } from '@/infra/keys';
+import { keywordQueue } from '@/infra/queues';
+import { logger } from '@/utils/logger';
 
 export async function addMainKeywordResearchJobs(data: {
   keyword: string;
@@ -20,67 +20,82 @@ export async function addKeywordMetricsJob(data: {
   language?: string;
 }) {
   const cacheKey = keys.keyword(data.keyword, data.country, data.language);
-  const jobId = `keyword-metrics-${cacheKey.replace(/:/g, "-")}`;
+  const jobId = `keyword-metrics-${cacheKey.replace(/:/g, '-')}`;
 
   try {
     await keywordQueue.add(
-      "fetch-keyword-metrics",
+      'fetch-keyword-metrics',
       { ...data, cacheKey },
       {
         jobId,
         attempts: 3,
-        backoff: { type: "exponential", delay: 2000 },
+        backoff: { type: 'exponential', delay: 2000 },
         removeOnComplete: true,
         removeOnFail: true,
       }
     );
   } catch (err: any) {
-    logger.error("Failed to add keyword metrics job", { error: err.message, keyword: data.keyword });
+    logger.error('Failed to add keyword metrics job', {
+      error: err.message,
+      keyword: data.keyword,
+    });
   }
 }
 
-export async function addKeywordVolumeJob(data: { keyword: string; country?: string; language?: string }) {
+export async function addKeywordVolumeJob(data: {
+  keyword: string;
+  country?: string;
+  language?: string;
+}) {
   const cacheKey = keys.keyword(data.keyword, data.country, data.language);
-  const jobId = `volume-${cacheKey.replace(/:/g, "-")}`;
+  const jobId = `volume-${cacheKey.replace(/:/g, '-')}`;
 
   try {
     await keywordQueue.add(
-      "fetch-keyword-volume",
+      'fetch-keyword-volume',
       { ...data, cacheKey },
       { jobId, attempts: 2, removeOnComplete: true, removeOnFail: true }
     );
   } catch (err: any) {
-    logger.error("Failed to add volume job", { error: err.message, keyword: data.keyword });
+    logger.error('Failed to add volume job', { error: err.message, keyword: data.keyword });
   }
 }
 
-export async function addKeywordDifficultyJob(data: { keyword: string; country?: string; language?: string }) {
+export async function addKeywordDifficultyJob(data: {
+  keyword: string;
+  country?: string;
+  language?: string;
+}) {
   const cacheKey = keys.keyword(data.keyword, data.country, data.language);
-  const jobId = `difficulty-${cacheKey.replace(/:/g, "-")}`;
+  const jobId = `difficulty-${cacheKey.replace(/:/g, '-')}`;
 
   try {
     await keywordQueue.add(
-      "fetch-keyword-difficulty",
+      'fetch-keyword-difficulty',
       { ...data, cacheKey },
       { jobId, attempts: 2, removeOnComplete: true, removeOnFail: true }
     );
   } catch (err: any) {
-    logger.error("Failed to add difficulty job", { error: err.message, keyword: data.keyword });
+    logger.error('Failed to add difficulty job', { error: err.message, keyword: data.keyword });
   }
 }
 
-export async function addKeywordIntentJob(data: { keyword: string; country?: string; language?: string }) {
+export async function addKeywordIntentJob(data: {
+  keyword: string;
+  country?: string;
+  language?: string;
+}) {
   const cacheKey = keys.keyword(data.keyword, data.country, data.language);
-  const jobId = `intent-${cacheKey.replace(/:/g, "-")}`;
+  const jobId = `intent-${cacheKey.replace(/:/g, '-')}`;
 
   try {
     await keywordQueue.add(
-      "fetch-keyword-intent",
+      'fetch-keyword-intent',
       { ...data, cacheKey },
       { jobId, attempts: 2, removeOnComplete: true, removeOnFail: true }
     );
   } catch (err: any) {
-    logger.error("Failed to add intent job", { error: err.message, keyword: data.keyword });
+    logger.error('Failed to add intent job', { error: err.message, keyword: data.keyword });
   }
 }
 
@@ -94,16 +109,16 @@ export async function addKeywordRefinerJob(data: {
   const locCode = (data.locationCode || data.country)?.toString();
   const langCode = data.language;
   const cacheKey = keys.keywordRelatedKeywords(data.keyword, locCode, langCode);
-  const jobId = `related-keywords-${cacheKey.replace(/:/g, "-")}-${Date.now()}`;
+  const jobId = `related-keywords-${cacheKey.replace(/:/g, '-')}-${Date.now()}`;
 
   try {
     await keywordQueue.add(
-      "fetch-related-keywords",
+      'fetch-related-keywords',
       { ...data, cacheKey },
       {
         jobId,
         attempts: 3,
-        backoff: { type: "exponential", delay: 2000 },
+        backoff: { type: 'exponential', delay: 2000 },
         removeOnComplete: true,
         removeOnFail: true,
       }
@@ -123,16 +138,16 @@ export async function addKeywordResearchJob(data: {
   const locCode = (data.locationCode || data.country)?.toString();
   const langCode = data.language;
   const cacheKey = keys.keywordResearch(data.keyword, locCode, langCode);
-  const jobId = `keyword-research-${cacheKey.replace(/:/g, "-")}`;
+  const jobId = `keyword-research-${cacheKey.replace(/:/g, '-')}`;
 
   try {
     await keywordQueue.add(
-      "fetch-keyword-research",
+      'fetch-keyword-research',
       { ...data, cacheKey },
       {
         jobId,
         attempts: 3,
-        backoff: { type: "exponential", delay: 2000 },
+        backoff: { type: 'exponential', delay: 2000 },
         removeOnComplete: true,
         removeOnFail: true,
       }

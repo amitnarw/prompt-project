@@ -1,8 +1,8 @@
 import prisma from '../utils/prisma.js';
-import { VoteType } from '@prisma/client';
+import { VoteType } from '../../prisma/generated/prisma/client';
 
 export class VoteService {
-  async upvote(promptId: string, userId: string) {
+  async markWorks(promptId: string, userId: string) {
     const prompt = await prisma.prompt.findUnique({
       where: { id: promptId },
     });
@@ -21,10 +21,10 @@ export class VoteService {
     });
 
     if (existingVote) {
-      if (existingVote.type === VoteType.UP) {
+      if (existingVote.type === VoteType.WORKS) {
         await prisma.prompt.update({
           where: { id: promptId },
-          data: { upvotes: { decrement: 1 } },
+          data: { worksCount: { decrement: 1 } },
         });
 
         await prisma.vote.delete({
@@ -33,54 +33,54 @@ export class VoteService {
 
         const updated = await prisma.prompt.findUnique({
           where: { id: promptId },
-          select: { upvotes: true },
+          select: { worksCount: true },
         });
-        return { action: 'removed', newVoteCount: updated?.upvotes ?? 0 };
+        return { action: 'removed', newVoteCount: updated?.worksCount ?? 0 };
       }
 
-      if (existingVote.type === VoteType.DOWN) {
+      if (existingVote.type === VoteType.DOESNT_WORK) {
         await prisma.prompt.update({
           where: { id: promptId },
           data: {
-            upvotes: { increment: 1 },
-            downvotes: { decrement: 1 },
+            worksCount: { increment: 1 },
+            doesntWorkCount: { decrement: 1 },
           },
         });
 
         await prisma.vote.update({
           where: { id: existingVote.id },
-          data: { type: VoteType.UP },
+          data: { type: VoteType.WORKS },
         });
 
         const updated = await prisma.prompt.findUnique({
           where: { id: promptId },
-          select: { upvotes: true },
+          select: { worksCount: true },
         });
-        return { action: 'changed', newVoteCount: updated?.upvotes ?? 0 };
+        return { action: 'changed', newVoteCount: updated?.worksCount ?? 0 };
       }
     }
 
     await prisma.prompt.update({
       where: { id: promptId },
-      data: { upvotes: { increment: 1 } },
+      data: { worksCount: { increment: 1 } },
     });
 
     await prisma.vote.create({
       data: {
         promptId,
         userId,
-        type: VoteType.UP,
+        type: VoteType.WORKS,
       },
     });
 
     const updated = await prisma.prompt.findUnique({
       where: { id: promptId },
-      select: { upvotes: true },
+      select: { worksCount: true },
     });
-    return { action: 'added', newVoteCount: updated?.upvotes ?? 0 };
+    return { action: 'added', newVoteCount: updated?.worksCount ?? 0 };
   }
 
-  async downvote(promptId: string, userId: string) {
+  async markDoesntWork(promptId: string, userId: string) {
     const prompt = await prisma.prompt.findUnique({
       where: { id: promptId },
     });
@@ -99,10 +99,10 @@ export class VoteService {
     });
 
     if (existingVote) {
-      if (existingVote.type === VoteType.DOWN) {
+      if (existingVote.type === VoteType.DOESNT_WORK) {
         await prisma.prompt.update({
           where: { id: promptId },
-          data: { downvotes: { decrement: 1 } },
+          data: { doesntWorkCount: { decrement: 1 } },
         });
 
         await prisma.vote.delete({
@@ -111,51 +111,51 @@ export class VoteService {
 
         const updated = await prisma.prompt.findUnique({
           where: { id: promptId },
-          select: { downvotes: true },
+          select: { doesntWorkCount: true },
         });
-        return { action: 'removed', newVoteCount: updated?.downvotes ?? 0 };
+        return { action: 'removed', newVoteCount: updated?.doesntWorkCount ?? 0 };
       }
 
-      if (existingVote.type === VoteType.UP) {
+      if (existingVote.type === VoteType.WORKS) {
         await prisma.prompt.update({
           where: { id: promptId },
           data: {
-            upvotes: { decrement: 1 },
-            downvotes: { increment: 1 },
+            worksCount: { decrement: 1 },
+            doesntWorkCount: { increment: 1 },
           },
         });
 
         await prisma.vote.update({
           where: { id: existingVote.id },
-          data: { type: VoteType.DOWN },
+          data: { type: VoteType.DOESNT_WORK },
         });
 
         const updated = await prisma.prompt.findUnique({
           where: { id: promptId },
-          select: { downvotes: true },
+          select: { doesntWorkCount: true },
         });
-        return { action: 'changed', newVoteCount: updated?.downvotes ?? 0 };
+        return { action: 'changed', newVoteCount: updated?.doesntWorkCount ?? 0 };
       }
     }
 
     await prisma.prompt.update({
       where: { id: promptId },
-      data: { downvotes: { increment: 1 } },
+      data: { doesntWorkCount: { increment: 1 } },
     });
 
     await prisma.vote.create({
       data: {
         promptId,
         userId,
-        type: VoteType.DOWN,
+        type: VoteType.DOESNT_WORK,
       },
     });
 
     const updated = await prisma.prompt.findUnique({
       where: { id: promptId },
-      select: { downvotes: true },
+      select: { doesntWorkCount: true },
     });
-    return { action: 'added', newVoteCount: updated?.downvotes ?? 0 };
+    return { action: 'added', newVoteCount: updated?.doesntWorkCount ?? 0 };
   }
 
   async getUserVote(promptId: string, userId: string) {

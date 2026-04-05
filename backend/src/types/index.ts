@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import type { Request } from 'express';
 
 export interface AuthenticatedRequest extends Request {
   userId?: string;
@@ -9,6 +9,12 @@ export interface PaginationQuery {
   limit?: string;
   category?: string;
   search?: string;
+  tags?: string;
+  sortBy?: string;
+  isVerified?: string;
+  modelType?: string;
+  bookmarkedBy?: string;
+  collectionId?: string;
 }
 
 export interface CreatePromptInput {
@@ -47,4 +53,38 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
     total: number;
     totalPages: number;
   };
+}
+
+// Bookmark Types
+export interface CreateBookmarkInput {
+  promptId: string;
+}
+
+// Collection Types
+export interface CreateCollectionInput {
+  name: string;
+  description?: string;
+}
+
+export interface UpdateCollectionInput {
+  name?: string;
+  description?: string;
+}
+
+// Advanced Filter Types
+export interface AdvancedPromptFilter {
+  page?: number;
+  limit?: number;
+  category?: string;
+  search?: string;
+  tags?: string[];
+  sortBy?: 'newest' | 'oldest' | 'mostWorks' | 'mostDoesntWork' | 'alphabetical' | 'rating';
+  isVerified?: boolean;
+  modelType?: string;
+  minWorksCount?: number;
+  maxWorksCount?: number;
+  minDoesntWorkCount?: number;
+  maxDoesntWorkCount?: number;
+  bookmarkedBy?: string;
+  collectionId?: string;
 }

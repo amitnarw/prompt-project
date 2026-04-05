@@ -1,22 +1,25 @@
-import { Response } from 'express';
+import type { Response } from 'express';
 import { promptService } from '../services/promptService.js';
 import { voteService } from '../services/voteService.js';
-import { AuthenticatedRequest, CreatePromptInput, UpdatePromptInput } from '../types/index.js';
+import type { AuthenticatedRequest, CreatePromptInput, UpdatePromptInput } from '../types/index.js';
 
 const getParamId = (param: string | string[] | undefined): string => {
   if (Array.isArray(param)) return param[0] || '';
   return param || '';
 };
 
-export const getPrompts = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
+export const getPrompts = async (req: AuthenticatedRequest, res: Response) => {
   const result = await promptService.findAll({
     page: req.query.page as string,
     limit: req.query.limit as string,
     category: req.query.category as string,
     search: req.query.search as string,
+    tags: req.query.tags as string,
+    sortBy: req.query.sortBy as string,
+    isVerified: req.query.isVerified as string,
+    modelType: req.query.modelType as string,
+    bookmarkedBy: req.query.bookmarkedBy as string,
+    collectionId: req.query.collectionId as string,
   });
 
   res.json({
@@ -26,10 +29,7 @@ export const getPrompts = async (
   });
 };
 
-export const getPromptById = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
+export const getPromptById = async (req: AuthenticatedRequest, res: Response) => {
   const id = getParamId(req.params.id);
   const prompt = await promptService.findById(id);
 
@@ -39,10 +39,7 @@ export const getPromptById = async (
   });
 };
 
-export const createPrompt = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
+export const createPrompt = async (req: AuthenticatedRequest, res: Response) => {
   const input: CreatePromptInput = req.body;
   const prompt = await promptService.create(input);
 
@@ -53,10 +50,7 @@ export const createPrompt = async (
   });
 };
 
-export const updatePrompt = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
+export const updatePrompt = async (req: AuthenticatedRequest, res: Response) => {
   const id = getParamId(req.params.id);
   const input: UpdatePromptInput = req.body;
   const prompt = await promptService.update(id, input);
@@ -68,10 +62,7 @@ export const updatePrompt = async (
   });
 };
 
-export const deletePrompt = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
+export const deletePrompt = async (req: AuthenticatedRequest, res: Response) => {
   const id = getParamId(req.params.id);
   await promptService.delete(id);
 
@@ -81,13 +72,10 @@ export const deletePrompt = async (
   });
 };
 
-export const upvotePrompt = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
+export const upvotePrompt = async (req: AuthenticatedRequest, res: Response) => {
   const id = getParamId(req.params.id);
   const userId = req.userId || req.ip || 'anonymous';
-  const result = await voteService.upvote(id, userId);
+  const result = await voteService.markWorks(id, userId);
 
   res.json({
     success: true,
@@ -96,13 +84,10 @@ export const upvotePrompt = async (
   });
 };
 
-export const downvotePrompt = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
+export const downvotePrompt = async (req: AuthenticatedRequest, res: Response) => {
   const id = getParamId(req.params.id);
   const userId = req.userId || req.ip || 'anonymous';
-  const result = await voteService.downvote(id, userId);
+  const result = await voteService.markDoesntWork(id, userId);
 
   res.json({
     success: true,
@@ -111,10 +96,7 @@ export const downvotePrompt = async (
   });
 };
 
-export const forkPrompt = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
+export const forkPrompt = async (req: AuthenticatedRequest, res: Response) => {
   const id = getParamId(req.params.id);
   const userId = req.body.userId || req.userId || 'anonymous';
   const prompt = await promptService.fork(id, userId);
@@ -126,15 +108,35 @@ export const forkPrompt = async (
   });
 };
 
-export const getPromptVersions = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
+export const getPromptVersions = async (req: AuthenticatedRequest, res: Response) => {
   const id = getParamId(req.params.id);
   const versions = await promptService.getVersions(id);
 
   res.json({
     success: true,
     data: versions,
+  });
+};
+
+export const verifyPrompt = async (req: AuthenticatedRequest, res: Response) => {
+  const id = getParamId(req.params.id);
+  const verifiedBy = req.userId || 'admin';
+  const prompt = await promptService.verifyPrompt(id, verifiedBy);
+
+  res.json({
+    success: true,
+    data: prompt,
+    message: 'Prompt verified successfully',
+  });
+};
+
+export const unverifyPrompt = async (req: AuthenticatedRequest, res: Response) => {
+  const id = getParamId(req.params.id);
+  const prompt = await promptService.unverifyPrompt(id);
+
+  res.json({
+    success: true,
+    data: prompt,
+    message: 'Prompt unverification removed',
   });
 };

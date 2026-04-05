@@ -1,4 +1,4 @@
-import { redis } from "@/infra/redis";
+import { redis } from '@/infra/redis';
 
 export async function getCache<T>(key: string): Promise<T | null> {
   const data = await redis.get(key);
@@ -6,7 +6,7 @@ export async function getCache<T>(key: string): Promise<T | null> {
 }
 
 export async function setCache(key: string, value: any, ttl: number) {
-  await redis.set(key, JSON.stringify(value), "EX", ttl);
+  await redis.set(key, JSON.stringify(value), 'EX', ttl);
 }
 
 export async function deleteCache(key: string) {

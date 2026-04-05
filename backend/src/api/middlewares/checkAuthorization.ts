@@ -1,45 +1,35 @@
 import { type Request, type Response, type NextFunction } from "express";
-import { sendError } from "@/utils/response";
-import { decryptData } from "@/utils/encryptDecryptPayload";
+import { sendError } from "@/utils/response.js";
+import { getSession } from "@/lib/auth-helpers.js";
 
-interface UserData {
-  id: string;
-  email?: string;
-  name?: string;
-  role: { name: string; permissions: Array<{ canReadList: boolean; canReadSingle: boolean; canCreate: boolean; canUpdate: boolean; canDelete: boolean; module: { name: string } }> };
+interface Permission {
+  module: { name: string };
+  canReadList: boolean;
+  canReadSingle: boolean;
+  canCreate: boolean;
+  canUpdate: boolean;
+  canDelete: boolean;
 }
 
-export const checkAuthorization = (module: string, action: "canReadList" | "canReadSingle" | "canCreate" | "canUpdate" | "canDelete") => {
+interface UserWithRole {
+  role?: { name: string; permissions: Permission[] };
+}
+
+export const checkAuthorization = (
+  module: string,
+  action: "canReadList" | "canReadSingle" | "canCreate" | "canUpdate" | "canDelete"
+) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const userDataCookie = req.cookies.user_data;
-
-      if (!userDataCookie) {
-        return sendError(res, 401, "Unauthorized");
-      }
-
-      const userData = await decryptData<UserData>(userDataCookie);
-
-      if (!userData) {
-        return sendError(res, 401, "Unauthorized");
-      }
-
-      // Admin bypass
-      if (userData.role?.name === "admin") {
-        return next();
-      }
-
-      const permission = userData.role?.permissions?.find(
-        (p) => p.module?.name === module
-      );
-
-      if (!permission?.[action]) {
-        return sendError(res, 403, "Insufficient permissions");
-      }
-
-      next();
-    } catch (error) {
+    const session = await getSession(req);
+    if (!session) {
       return sendError(res, 401, "Unauthorized");
     }
+    const user = session.user as UserWithRole;
+    if (user.role?.name === "admin") return next();
+    const permission = user.role?.permissions?.find((p) => p.module?.name === module);
+    if (!permission?.[action]) {
+      return sendError(res, 403, "Insufficient permissions");
+    }
+    next();
   };
 };
