@@ -50,7 +50,7 @@ export default function PromptDetailPage() {
   if (isLoading) {
     return (
       <div className="flex justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#acabaa]" />
       </div>
     );
   }
@@ -60,8 +60,8 @@ export default function PromptDetailPage() {
       <div className="container mx-auto px-4 py-8">
         <Card className="max-w-md mx-auto">
           <CardHeader>
-            <CardTitle className="text-destructive">Error</CardTitle>
-            <CardDescription>Prompt not found</CardDescription>
+            <CardTitle className="text-[#ee7d77]">Error</CardTitle>
+            <CardDescription className="text-[#acabaa]">Prompt not found</CardDescription>
           </CardHeader>
           <CardContent>
             <Link href="/">
@@ -80,11 +80,11 @@ export default function PromptDetailPage() {
       <div className="max-w-4xl mx-auto">
         <div className="flex items-start justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">{prompt.title}</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-[#e7e5e4]">{prompt.title}</h1>
             {prompt.forkedFrom && (
               <Link
                 href={`/prompts/${prompt.forkedFrom}`}
-                className="text-sm text-muted-foreground mt-1 flex items-center gap-1 hover:text-primary transition-colors"
+                className="text-sm text-[#acabaa] mt-1 flex items-center gap-1 hover:text-[#ffb5a0] transition-colors"
               >
                 <GitFork className="h-4 w-4" />
                 Forked from another prompt
@@ -101,14 +101,14 @@ export default function PromptDetailPage() {
         </div>
 
         <div className="flex flex-wrap gap-2 mb-6">
-          <span className="inline-flex items-center gap-1 text-sm bg-secondary text-secondary-foreground px-3 py-1 rounded">
+          <span className="inline-flex items-center gap-1 text-sm bg-[#3c3b3b] text-[#c1bfbe] px-3 py-1 uppercase tracking-wide">
             <Tag className="h-3 w-3" />
             {prompt.category}
           </span>
           {prompt.tags.map((tag) => (
             <span
               key={tag}
-              className="text-sm bg-accent text-accent-foreground px-3 py-1 rounded"
+              className="text-sm bg-[rgba(72,72,72,0.15)] text-[#e7e5e4] px-3 py-1"
             >
               {tag}
             </span>
@@ -117,25 +117,25 @@ export default function PromptDetailPage() {
 
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Description</CardTitle>
+            <CardTitle className="text-[#e7e5e4]">Description</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">{prompt.description}</p>
+            <p className="text-[#acabaa]">{prompt.description}</p>
           </CardContent>
         </Card>
 
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Prompt Content</CardTitle>
+            <CardTitle className="text-[#e7e5e4]">Prompt Content</CardTitle>
           </CardHeader>
           <CardContent>
-            <pre className="bg-muted/50 p-4 rounded-md font-mono text-sm whitespace-pre-wrap overflow-x-auto">
+            <pre className="bg-[#131313] p-4 font-mono text-sm whitespace-pre-wrap overflow-x-auto text-[#e7e5e4]">
               {prompt.content}
             </pre>
           </CardContent>
         </Card>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6 text-sm text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6 text-sm text-[#acabaa]">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
               <Calendar className="h-4 w-4" />
@@ -217,14 +217,14 @@ export default function PromptDetailPage() {
           <TabsContent value="versions">
             <Card>
               <CardHeader>
-                <CardTitle>Version History</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-[#e7e5e4]">Version History</CardTitle>
+                <CardDescription className="text-[#acabaa]">
                   Previous versions of this prompt
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 {!prompt.versions || prompt.versions.length === 0 ? (
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-[#acabaa] text-sm">
                     No version history yet. Versions are created when the prompt is updated.
                   </p>
                 ) : (
@@ -232,14 +232,14 @@ export default function PromptDetailPage() {
                     {prompt.versions.map((version) => (
                       <div
                         key={version.id}
-                        className="border rounded-lg p-4"
+                        className="p-4"
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium">
+                          <span className="text-sm font-medium text-[#e7e5e4]">
                             Version from {formatDateTime(version.createdAt)}
                           </span>
                         </div>
-                        <pre className="bg-muted/50 p-3 rounded text-sm font-mono whitespace-pre-wrap">
+                        <pre className="bg-[#131313] p-3 text-sm font-mono whitespace-pre-wrap text-[#e7e5e4]">
                           {version.content}
                         </pre>
                       </div>

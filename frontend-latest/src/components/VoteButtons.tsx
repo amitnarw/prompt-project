@@ -81,7 +81,7 @@ export function VoteButtons({ promptId, worksCount, doesntWorkCount, onVote }: V
         disabled={markWorksMutation.isPending}
         className={cn(
           'gap-1',
-          userVote === 'works' && 'text-green-600 hover:text-green-700'
+          userVote === 'works' && 'text-[#eaffeb]'
         )}
       >
         <CheckCircle className="h-4 w-4" />
@@ -95,7 +95,7 @@ export function VoteButtons({ promptId, worksCount, doesntWorkCount, onVote }: V
         disabled={markDoesntWorkMutation.isPending}
         className={cn(
           'gap-1',
-          userVote === 'doesntWork' && 'text-red-600 hover:text-red-700'
+          userVote === 'doesntWork' && 'text-[#ee7d77]'
         )}
       >
         <XCircle className="h-4 w-4" />

@@ -84,6 +84,7 @@ model Prompt {
   title           String
   description     String
   content         String
+  exampleOutput   String?
   category        String
   tags            String[]
   worksCount      Int       @default(0)

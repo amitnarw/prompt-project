@@ -79,9 +79,9 @@ export function FilterSidebar({
     <div className="space-y-6">
       {/* Header with clear */}
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold">Filters</h3>
+        <h3 className="font-semibold text-[#e7e5e4]">Filters</h3>
         {hasActiveFilters && (
-          <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-1">
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-1 text-[#acabaa]">
             <X className="h-3 w-3" />
             Clear
           </Button>
@@ -90,9 +90,9 @@ export function FilterSidebar({
 
       {/* Sort By */}
       <div className="space-y-2">
-        <Label>Sort By</Label>
+        <Label className="text-[#e7e5e4]">Sort By</Label>
         <select
-          className="w-full p-2 border rounded-md text-sm bg-background"
+          className="w-full p-2 border border-[rgba(72,72,72,0.15)] text-sm bg-[#131313] text-[#e7e5e4]"
           value={filters.sortBy}
           onChange={(e) => handleSortChange(e.target.value)}
         >
@@ -107,7 +107,7 @@ export function FilterSidebar({
 
       {/* Category */}
       <div className="space-y-2">
-        <Label>Category</Label>
+        <Label className="text-[#e7e5e4]">Category</Label>
         <Input
           placeholder="Search categories..."
           value={search}
@@ -129,8 +129,8 @@ export function FilterSidebar({
               type="button"
               onClick={() => handleCategoryChange(cat)}
               className={cn(
-                'block w-full text-left px-2 py-1 text-sm rounded hover:bg-accent',
-                filters.category === cat && 'bg-accent'
+                'block w-full text-left px-2 py-1 text-sm hover:bg-[rgba(72,72,72,0.15)] text-[#e7e5e4]',
+                filters.category === cat && 'bg-[rgba(72,72,72,0.15)]'
               )}
             >
               {cat}
@@ -145,7 +145,7 @@ export function FilterSidebar({
           checked={filters.isVerified}
           onCheckedChange={(checked: boolean | 'indeterminate') => handleVerifiedChange(checked === true)}
         />
-        <Label htmlFor="verified" className="text-sm font-normal cursor-pointer">
+        <Label htmlFor="verified" className="text-sm font-normal cursor-pointer text-[#e7e5e4]">
           Verified only
         </Label>
       </div>
@@ -153,9 +153,9 @@ export function FilterSidebar({
       {/* Model Type */}
       {modelTypes.length > 0 && (
         <div className="space-y-2">
-          <Label>Model Type</Label>
+          <Label className="text-[#e7e5e4]">Model Type</Label>
           <select
-            className="w-full p-2 border rounded-md text-sm bg-background"
+            className="w-full p-2 border border-[rgba(72,72,72,0.15)] text-sm bg-[#131313] text-[#e7e5e4]"
             value={filters.modelType}
             onChange={(e) => handleModelTypeChange(e.target.value)}
           >
@@ -172,7 +172,7 @@ export function FilterSidebar({
       {/* Tags */}
       {availableTags.length > 0 && (
         <div className="space-y-2">
-          <Label>Tags</Label>
+          <Label className="text-[#e7e5e4]">Tags</Label>
           <div className="flex flex-wrap gap-2">
             {availableTags.slice(0, 15).map((tag) => (
               <Badge

@@ -7,47 +7,38 @@ import { PromptCard } from '@/components/PromptCard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { FilterSidebar, type FilterState } from '@/components/FilterSidebar';
-import { Loader2, Search, Plus, SlidersHorizontal, X } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Search, Plus, X, Filter, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 
 const SORT_OPTIONS = [
   { value: 'newest', label: 'Newest' },
   { value: 'oldest', label: 'Oldest' },
   { value: 'mostWorks', label: 'Most Works' },
-  { value: 'mostDoesntWork', label: 'Most Doesnt Work' },
-  { value: 'alphabetical', label: 'Alphabetical' },
+  { value: 'alphabetical', label: 'A-Z' },
 ];
 
-const CATEGORIES = ['Writing', 'Coding', 'Analysis', 'Creative', 'Education', 'Business', 'Marketing', 'Development', 'Productivity', 'Travel', 'Career', 'Health & Fitness', 'Cooking', 'Content Creation', 'Wellness', 'Legal', 'Events', 'Education'];
-const TAGS = ['ai', 'gpt', 'claude', 'gemini', 'writing', 'coding', 'creative', 'productivity', 'programming', 'sql', 'database', 'api', 'documentation', 'debugging', 'tutoring', 'learning', 'interview', 'job-search', 'resume', 'career', 'professional', 'email', 'communication', 'marketing', 'social-media', 'seo', 'content', 'blog', 'video', 'youtube', 'scriptwriting', 'presentation', 'business', 'meeting', 'notes', 'fitness', 'workout', 'health', 'recipes', 'cooking', 'travel', 'vacation', 'planning'];
-const MODEL_TYPES = ['GPT-4', 'Claude', 'Gemini', 'Llama', 'Other'];
+const CATEGORIES = ['Writing', 'Coding', 'Analysis', 'Creative', 'Education', 'Business', 'Marketing', 'Development', 'Productivity', 'Travel', 'Career'];
 
 export default function HomePage() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [sortBy, setSortBy] = useState('newest');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [showVerified, setShowVerified] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState<FilterState>({
-    category: '',
-    tags: [],
-    sortBy: 'newest',
-    isVerified: false,
-    modelType: '',
-  });
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['prompts', page, debouncedSearch, filters],
+    queryKey: ['prompts', page, debouncedSearch, sortBy, selectedCategory, showVerified],
     queryFn: () =>
       api.prompts.getAll({
         page,
-        limit: 12,
+        limit: 9,
         search: debouncedSearch || undefined,
-        category: filters.category || undefined,
-        tags: filters.tags.length > 0 ? filters.tags : undefined,
-        sortBy: filters.sortBy as any,
-        isVerified: filters.isVerified || undefined,
-        modelType: filters.modelType || undefined,
+        category: selectedCategory || undefined,
+        sortBy: sortBy as any,
+        isVerified: showVerified || undefined,
       }),
   });
 
@@ -65,13 +56,23 @@ export default function HomePage() {
     setPage(1);
   };
 
+  const clearFilters = () => {
+    setSortBy('newest');
+    setSelectedCategory('');
+    setShowVerified(false);
+    setSearch('');
+    setDebouncedSearch('');
+  };
+
+  const hasActiveFilters = selectedCategory || showVerified || search;
+
   if (isError) {
     return (
       <div className="container mx-auto px-4 py-8">
         <Card className="max-w-md mx-auto">
           <CardHeader>
-            <CardTitle className="text-destructive">Error</CardTitle>
-            <CardDescription>Failed to load prompts. Please try again.</CardDescription>
+            <CardTitle className="text-[#ee7d77]">Error</CardTitle>
+            <CardDescription className="text-[#acabaa]">Failed to load prompts. Please try again.</CardDescription>
           </CardHeader>
         </Card>
       </div>
@@ -79,138 +80,154 @@ export default function HomePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+    <div className="container mx-auto px-4 py-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Prompt Library</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl font-bold tracking-tight text-[#e7e5e4]">Prompt Library</h1>
+          <p className="text-[#acabaa] text-sm">
             Discover and share AI prompts
           </p>
         </div>
         <Link href="/prompts/new">
-          <Button className="gap-2">
-            <Plus className="h-4 w-4" />
+          <Button size="sm" className="gap-2">
+            <Plus className="h-3 w-3" />
             Create Prompt
           </Button>
         </Link>
       </div>
 
-      {/* Search and Filter Bar */}
-      <div className="flex gap-2 mb-6">
-        <form onSubmit={handleSearch} className="flex-1 flex gap-2">
-          <Input
-            type="search"
-            placeholder="Search prompts..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="flex-1"
-          />
-          <Button type="submit" variant="secondary">
-            <Search className="h-4 w-4" />
-          </Button>
+      {/* Compact Search & Filters Row */}
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        {/* Search */}
+        <form onSubmit={handleSearch} className="flex-1 min-w-[200px] max-w-md">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#acabaa]" />
+            <Input
+              type="search"
+              placeholder="Search prompts..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-8 h-9 text-sm"
+            />
+          </div>
         </form>
+
+        {/* Sort Dropdown */}
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="h-9 px-3 text-sm border border-[rgba(72,72,72,0.15)] bg-[#131313] text-[#e7e5e4]"
+        >
+          {SORT_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+
+        {/* Verified Toggle */}
+        <Badge
+          variant={showVerified ? 'default' : 'outline'}
+          className="cursor-pointer h-9 px-3"
+          onClick={() => setShowVerified(!showVerified)}
+        >
+          Verified
+        </Badge>
+
+        {/* More Filters Toggle */}
         <Button
           variant="outline"
+          size="sm"
+          className="h-9 gap-1"
           onClick={() => setShowFilters(!showFilters)}
-          className="gap-2"
         >
-          <SlidersHorizontal className="h-4 w-4" />
+          <Filter className="h-3.5 w-3.5" />
           Filters
+          <ChevronDown className={`h-3 w-3 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
         </Button>
+
+        {/* Clear Filters */}
+        {hasActiveFilters && (
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="h-9 gap-1 text-[#acabaa]">
+            <X className="h-3 w-3" />
+            Clear
+          </Button>
+        )}
       </div>
 
-      {/* Filter Sidebar (mobile) / Drawer */}
+      {/* Expandable Category Filters */}
       {showFilters && (
-        <div className="lg:hidden mb-6 p-4 border rounded-lg bg-card">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Filters</h3>
-            <Button variant="ghost" size="sm" onClick={() => setShowFilters(false)}>
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-          <FilterSidebar
-            filters={filters}
-            onFiltersChange={setFilters}
-            categories={CATEGORIES}
-            availableTags={TAGS}
-            modelTypes={MODEL_TYPES}
-          />
+        <div className="flex flex-wrap gap-2 mb-4 pb-4">
+          {CATEGORIES.map((cat) => (
+            <Badge
+              key={cat}
+              variant={selectedCategory === cat ? 'default' : 'outline'}
+              className="cursor-pointer px-2.5 py-1 text-xs"
+              onClick={() => setSelectedCategory(selectedCategory === cat ? '' : cat)}
+            >
+              {cat}
+            </Badge>
+          ))}
         </div>
       )}
 
-      {/* Desktop Layout with Sidebar */}
-      <div className="flex gap-8">
-        {/* Desktop Filter Sidebar */}
-        <aside className="hidden lg:block w-64 shrink-0">
-          <div className="sticky top-4">
-            <FilterSidebar
-              filters={filters}
-              onFiltersChange={setFilters}
-              categories={CATEGORIES}
-              availableTags={TAGS}
-              modelTypes={MODEL_TYPES}
-            />
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <div className="flex-1">
-          {isLoading ? (
-            <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            </div>
-          ) : data?.data.length === 0 ? (
-            <Card className="max-w-md mx-auto">
-              <CardHeader>
-                <CardTitle>No prompts found</CardTitle>
-                <CardDescription>
-                  {debouncedSearch || filters.category || filters.tags.length > 0
-                    ? 'Try different filters'
-                    : 'Be the first to create a prompt!'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Link href="/prompts/new">
-                  <Button className="gap-2">
-                    <Plus className="h-4 w-4" />
-                    Create Prompt
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {data?.data.map((prompt) => (
-                  <PromptCard key={prompt.id} prompt={prompt} />
-                ))}
-              </div>
-
-              {data && data.pagination.totalPages > 1 && (
-                <div className="flex justify-center gap-2 mt-8">
-                  <Button
-                    variant="outline"
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
-                    disabled={page === 1}
-                  >
-                    Previous
-                  </Button>
-                  <span className="flex items-center px-4 text-sm text-muted-foreground">
-                    Page {page} of {data.pagination.totalPages}
-                  </span>
-                  <Button
-                    variant="outline"
-                    onClick={() => setPage((p) => p + 1)}
-                    disabled={page >= data.pagination.totalPages}
-                  >
-                    Next
-                  </Button>
-                </div>
-              )}
-            </>
-          )}
+      {/* Results */}
+      {isLoading ? (
+        <div className="flex justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-[#acabaa]" />
         </div>
-      </div>
+      ) : data?.data.length === 0 ? (
+        <Card className="max-w-md mx-auto">
+          <CardHeader>
+            <CardTitle className="text-[#e7e5e4]">No prompts found</CardTitle>
+            <CardDescription className="text-[#acabaa]">
+              {hasActiveFilters ? 'Try different filters' : 'Be the first to create a prompt!'}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {hasActiveFilters ? (
+              <Button variant="outline" onClick={clearFilters}>Clear Filters</Button>
+            ) : (
+              <Link href="/prompts/new">
+                <Button className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Create Prompt
+                </Button>
+              </Link>
+            )}
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data?.data.map((prompt) => (
+              <PromptCard key={prompt.id} prompt={prompt} />
+            ))}
+          </div>
+
+          {data && data.pagination.totalPages > 1 && (
+            <div className="flex justify-center gap-2 mt-8">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+              >
+                Previous
+              </Button>
+              <span className="flex items-center px-4 text-sm text-[#acabaa]">
+                Page {page} of {data.pagination.totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => p + 1)}
+                disabled={page >= data.pagination.totalPages}
+              >
+                Next
+              </Button>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }

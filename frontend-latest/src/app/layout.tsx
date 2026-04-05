@@ -33,8 +33,8 @@ export default function RootLayout({
           <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-1">{children}</main>
-            <footer className="border-t py-6">
-              <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+            <footer className="py-6 bg-gradient-to-t from-[#ff4500] via-[rgba(255,69,0,0.4)] to-transparent">
+              <div className="container mx-auto px-4 text-center text-sm text-[#e7e5e4]">
                 Prompt Verse - A place to share and test AI prompts
               </div>
             </footer>

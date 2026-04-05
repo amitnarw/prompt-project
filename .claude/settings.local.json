@@ -110,7 +110,13 @@
       "Bash(curl -v http://localhost:5000/api/auth/session)",
       "Bash(curl -v \"http://localhost:5000/api/auth/google\")",
       "Bash(curl -s -X POST http://localhost:5000/api/playground/run -H \"Content-Type: application/json\" -d '{\"prompt\":\"test prompt\"}')",
-      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"ok, and after that also check the seeds have perfect data or not, if not then make it perfect\" npx prisma migrate reset --force)"
+      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"ok, and after that also check the seeds have perfect data or not, if not then make it perfect\" npx prisma migrate reset --force)",
+      "Bash(grep -o '\"projects\":\\\\[{\"name\":\"[^\"]*\",\"project\"')",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); print\\([p['name'] for p in data.get\\('projects',[]\\)]\\)\")",
+      "mcp__stitch__get_project",
+      "mcp__stitch__get_screen",
+      "WebFetch(domain:lh3.googleusercontent.com)",
+      "mcp__stitch__list_design_systems"
     ],
     "additionalDirectories": [
       "c:\\Users\\Narwal\\Desktop\\prompt-project\\backend",

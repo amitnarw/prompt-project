@@ -3,6 +3,7 @@ export interface Prompt {
   title: string;
   description: string;
   content: string;
+  exampleOutput?: string | null;
   category: string;
   tags: string[];
   worksCount: number;

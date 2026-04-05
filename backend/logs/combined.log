@@ -2056,3 +2056,98 @@
 {"ip":"::1","level":"info","message":"Incoming Request","method":"OPTIONS","path":"/api/prompts","query":{"limit":"12","page":"1","sortBy":"newest"},"requestId":"1775399837192-qkblbm8jo","service":"prompt-verse-backend","timestamp":"2026-04-05 20:07:17","url":"/api/prompts?page=1&limit=12&sortBy=newest","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
 {"ip":"::1","level":"info","message":"Incoming Request","method":"GET","path":"/api/prompts","query":{"limit":"12","page":"1","sortBy":"newest"},"requestId":"1775399837194-fem0cfz04","service":"prompt-verse-backend","timestamp":"2026-04-05 20:07:17","url":"/api/prompts?page=1&limit=12&sortBy=newest","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
 {"level":"info","message":"Request Completed","method":"GET","requestId":"1775399837194-fem0cfz04","responseTime":"3ms","service":"prompt-verse-backend","statusCode":200,"timestamp":"2026-04-05 20:07:17","url":"/api/prompts?page=1&limit=12&sortBy=newest"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:11:45"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:11:45"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:11:45"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:11:45"}
+{"ip":"::1","level":"info","message":"Incoming Request","method":"OPTIONS","path":"/api/prompts","query":{"limit":"12","page":"1","sortBy":"newest"},"requestId":"1775400167537-l5qbu6afq","service":"prompt-verse-backend","timestamp":"2026-04-05 20:12:47","url":"/api/prompts?page=1&limit=12&sortBy=newest","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Incoming Request","method":"GET","path":"/api/auth/get-session","requestId":"1775400167543-7449aikfc","service":"prompt-verse-backend","timestamp":"2026-04-05 20:12:47","url":"/api/auth/get-session","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Incoming Request","method":"GET","path":"/api/prompts","query":{"limit":"12","page":"1","sortBy":"newest"},"requestId":"1775400167577-tzs3fn4lh","service":"prompt-verse-backend","timestamp":"2026-04-05 20:12:47","url":"/api/prompts?page=1&limit=12&sortBy=newest","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+{"level":"info","message":"Request Completed","method":"GET","requestId":"1775400167577-tzs3fn4lh","responseTime":"176ms","service":"prompt-verse-backend","statusCode":200,"timestamp":"2026-04-05 20:12:47","url":"/api/prompts?page=1&limit=12&sortBy=newest"}
+{"ip":"::1","level":"info","message":"Incoming Request","method":"GET","path":"/api/auth/get-session","requestId":"1775400191459-xxkm0wadv","service":"prompt-verse-backend","timestamp":"2026-04-05 20:13:11","url":"/api/auth/get-session","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Incoming Request","method":"OPTIONS","path":"/api/prompts","query":{"limit":"12","page":"1","sortBy":"newest"},"requestId":"1775400329709-i34qb0e51","service":"prompt-verse-backend","timestamp":"2026-04-05 20:15:29","url":"/api/prompts?page=1&limit=12&sortBy=newest","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Incoming Request","method":"GET","path":"/api/prompts","query":{"limit":"12","page":"1","sortBy":"newest"},"requestId":"1775400329714-byhmvyy65","service":"prompt-verse-backend","timestamp":"2026-04-05 20:15:29","url":"/api/prompts?page=1&limit=12&sortBy=newest","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+{"level":"info","message":"Request Completed","method":"GET","requestId":"1775400329714-byhmvyy65","responseTime":"57ms","service":"prompt-verse-backend","statusCode":200,"timestamp":"2026-04-05 20:15:29","url":"/api/prompts?page=1&limit=12&sortBy=newest"}
+{"ip":"::1","level":"info","message":"Incoming Request","method":"OPTIONS","path":"/api/prompts","query":{"limit":"12","page":"1","sortBy":"newest"},"requestId":"1775400485884-9llmadagu","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:05","url":"/api/prompts?page=1&limit=12&sortBy=newest","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Incoming Request","method":"GET","path":"/api/prompts","query":{"limit":"12","page":"1","sortBy":"newest"},"requestId":"1775400485887-ezohrgoko","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:05","url":"/api/prompts?page=1&limit=12&sortBy=newest","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+{"level":"info","message":"Request Completed","method":"GET","requestId":"1775400485887-ezohrgoko","responseTime":"155ms","service":"prompt-verse-backend","statusCode":200,"timestamp":"2026-04-05 20:18:06","url":"/api/prompts?page=1&limit=12&sortBy=newest"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:18:54"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:25"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:25"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:25"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:25"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Server running on port 5000","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Environment: development","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"Health check: http://localhost:5000/health","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}
+{"level":"info","message":"API base: http://localhost:5000/api","service":"prompt-verse-backend","timestamp":"2026-04-05 20:20:26"}

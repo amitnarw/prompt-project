@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { api } from '@/lib/api';
 import { PlaygroundInput } from '@/types';
@@ -10,16 +10,34 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Play, Copy, Check } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Play, Copy, Check, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { AuthGuard } from '@/components/AuthGuard';
 
 export default function PlaygroundPage() {
+  return (
+    <AuthGuard>
+      <PlaygroundContent />
+    </AuthGuard>
+  );
+}
+
+function PlaygroundContent() {
   const searchParams = useSearchParams();
   const [prompt, setPrompt] = useState('');
   const [variables, setVariables] = useState<Record<string, string>>({});
   const [variableInput, setVariableInput] = useState('');
   const [response, setResponse] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  const { data: usageData } = useQuery({
+    queryKey: ['playground-usage'],
+    queryFn: () => api.playground.getUsage(),
+  });
+
+  const usage = usageData?.data;
+  const isLimitReached = usage && usage.remaining <= 0 && usage.limit !== -1;
 
   useEffect(() => {
     const promptParam = searchParams.get('prompt');
@@ -35,8 +53,12 @@ export default function PlaygroundPage() {
         setResponse(result.data.response);
       }
     },
-    onError: () => {
-      toast.error('Failed to run prompt');
+    onError: (error: any) => {
+      if (error?.message?.includes('Daily limit')) {
+        toast.error('Daily limit reached. Upgrade your plan for more prompts.');
+      } else {
+        toast.error('Failed to run prompt');
+      }
     },
   });
 
@@ -89,18 +111,42 @@ export default function PlaygroundPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Prompt Playground</h1>
-          <p className="text-muted-foreground mt-1">
-            Test your prompts with simulated AI responses
-          </p>
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-[#e7e5e4]">Prompt Playground</h1>
+              <p className="text-[#acabaa] mt-1">
+                Test your prompts with simulated AI responses
+              </p>
+            </div>
+
+            {/* Usage Stats */}
+            {usage && (
+              <div className="flex items-center gap-3">
+                <Badge variant={isLimitReached ? 'destructive' : 'secondary'} className="px-3 py-1.5 text-sm">
+                  {isLimitReached ? (
+                    <><AlertCircle className="h-4 w-4 mr-1" /> Limit Reached</>
+                  ) : usage.limit === -1 ? (
+                    'Unlimited'
+                  ) : (
+                    `${usage.remaining} of ${usage.limit} prompts remaining`
+                  )}
+                </Badge>
+                {usage.limit !== -1 && !isLimitReached && (
+                  <span className="text-xs text-[#acabaa]">
+                    Resets at {new Date(usage.resetsAt).toLocaleTimeString()}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Prompt</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-[#e7e5e4]">Prompt</CardTitle>
+                <CardDescription className="text-[#acabaa]">
                   Enter your prompt. Use {'{{variable}}'} syntax for variables.
                 </CardDescription>
               </CardHeader>
@@ -114,7 +160,7 @@ export default function PlaygroundPage() {
                 />
                 <Button
                   onClick={handleRun}
-                  disabled={!prompt.trim() || runMutation.isPending}
+                  disabled={!prompt.trim() || runMutation.isPending || isLimitReached}
                   className="w-full gap-2"
                 >
                   {runMutation.isPending ? (
@@ -122,6 +168,8 @@ export default function PlaygroundPage() {
                       <Loader2 className="h-4 w-4 animate-spin" />
                       Running...
                     </>
+                  ) : isLimitReached ? (
+                    'Daily Limit Reached'
                   ) : (
                     <>
                       <Play className="h-4 w-4" />
@@ -134,8 +182,8 @@ export default function PlaygroundPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Variables</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-[#e7e5e4]">Variables</CardTitle>
+                <CardDescription className="text-[#acabaa]">
                   Add variable values to replace {'{{placeholder}}'} in your prompt.
                 </CardDescription>
               </CardHeader>
@@ -161,10 +209,10 @@ export default function PlaygroundPage() {
                     {Object.entries(variables).map(([key, value]) => (
                       <div
                         key={key}
-                        className="flex items-center justify-between bg-muted/50 rounded-md px-3 py-2"
+                        className="flex items-center justify-between bg-[#131313] px-3 py-2"
                       >
-                        <span className="font-mono text-sm">
-                          <span className="text-muted-foreground">{key}:</span>{' '}
+                        <span className="font-mono text-sm text-[#e7e5e4]">
+                          <span className="text-[#acabaa]">{key}:</span>{' '}
                           {value}
                         </span>
                         <Button
@@ -179,7 +227,7 @@ export default function PlaygroundPage() {
                   </div>
                 )}
                 {Object.keys(variables).length === 0 && (
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-[#acabaa]">
                     No variables added yet.
                   </p>
                 )}
@@ -190,8 +238,8 @@ export default function PlaygroundPage() {
           <Card className="lg:sticky lg:top-4 h-fit">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Response</CardTitle>
-                <CardDescription>Simulated AI response</CardDescription>
+                <CardTitle className="text-[#e7e5e4]">Response</CardTitle>
+                <CardDescription className="text-[#acabaa]">Simulated AI response</CardDescription>
               </div>
               {response && (
                 <Button
@@ -216,11 +264,11 @@ export default function PlaygroundPage() {
             </CardHeader>
             <CardContent>
               {!response ? (
-                <div className="flex items-center justify-center h-64 text-muted-foreground">
+                <div className="flex items-center justify-center h-64 text-[#acabaa]">
                   <p>Run a prompt to see the response here</p>
                 </div>
               ) : (
-                <pre className="bg-muted/50 p-4 rounded-md font-mono text-sm whitespace-pre-wrap overflow-x-auto">
+                <pre className="bg-[#131313] p-4 font-mono text-sm whitespace-pre-wrap overflow-x-auto text-[#e7e5e4]">
                   {response}
                 </pre>
               )}

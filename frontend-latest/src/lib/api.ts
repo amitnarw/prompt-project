@@ -128,6 +128,9 @@ export const api = {
         body: JSON.stringify(data),
       });
     },
+    getUsage: (): Promise<ApiResponse<{ limit: number; used: number; remaining: number; resetsAt: string }>> => {
+      return fetchApi<ApiResponse<{ limit: number; used: number; remaining: number; resetsAt: string }>>('/playground/usage');
+    },
   },
 
   bookmarks: {
