@@ -1,93 +1,75 @@
-'use client';
-
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Prompt } from '@/types';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { VerifiedBadge } from '@/components/VerifiedBadge';
-import { PromptModal } from '@/components/PromptModal';
-import { VoteButtons } from '@/components/VoteButtons';
-import { BookmarkButton } from '@/components/BookmarkButton';
-import { formatDate, truncate } from '@/lib/utils';
-import { Calendar, GitFork, Play } from 'lucide-react';
+import React from 'react';
+import { Bookmark, GitFork, Play } from 'lucide-react';
+import { PromptProtocol } from '../types';
+import { motion } from 'motion/react';
 
 interface PromptCardProps {
-  prompt: Prompt;
-  onVote?: () => void;
+  prompt: PromptProtocol;
+  onClick: (prompt: PromptProtocol) => void;
+  onRun: (prompt: PromptProtocol) => void;
 }
 
-export function PromptCard({ prompt, onVote }: PromptCardProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter();
-
-  const handlePlaygroundClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    router.push(`/playground?prompt=${encodeURIComponent(prompt.content)}`);
-  };
-
+export const PromptCard: React.FC<PromptCardProps> = ({ prompt, onClick, onRun }) => {
   return (
-    <>
-      <Card className="h-full flex flex-col cursor-pointer transition-all duration-300 hover:before:opacity-100" onClick={() => setIsModalOpen(true)}>
-        <CardHeader className="pb-2">
-          <div className="flex items-start justify-between gap-2">
-            <CardTitle className="line-clamp-1 flex items-center gap-2 text-base font-semibold text-[#e7e5e4]">
-              {prompt.title}
-              {prompt.isVerified && <VerifiedBadge />}
-            </CardTitle>
-            {prompt.forkedFrom && (
-              <span title="Forked prompt">
-                <GitFork className="h-4 w-4 text-[#acabaa] shrink-0" />
-              </span>
-            )}
+    <motion.article 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -4 }}
+      className="bg-gradient-to-br from-surface-container-low to-surface-container p-6 relative group cursor-pointer transition-all duration-300"
+      onClick={() => onClick(prompt)}
+    >
+      <div className="absolute inset-0 bg-tertiary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+      <div className="flex justify-between items-start mb-6">
+        <div className="flex flex-col">
+          <span className={`font-label text-[10px] uppercase tracking-widest mb-1 flex items-center gap-1 ${
+            prompt.type === 'Verified_Protocol' ? 'text-tertiary-dim' : 'text-on-surface-variant'
+          }`}>
+            {prompt.type === 'Verified_Protocol' && <span className="w-1 h-1 bg-tertiary"></span>}
+            {prompt.type}
+          </span>
+          <h3 className="font-headline font-bold text-xl leading-tight">{prompt.title}</h3>
+        </div>
+        <button 
+          className="text-on-surface-variant hover:text-white transition-colors"
+          onClick={(e) => { e.stopPropagation(); }}
+        >
+          <Bookmark size={18} />
+        </button>
+      </div>
+      <p className="text-on-surface-variant text-sm mb-6 font-sans leading-relaxed line-clamp-3">
+        {prompt.description}
+      </p>
+      <div className="flex flex-wrap gap-2 mb-8">
+        <span className="px-2 py-0.5 bg-surface-container-highest font-label text-[10px] uppercase text-on-surface-variant">{prompt.model}</span>
+        {prompt.tags.map(tag => (
+          <span key={tag} className="px-2 py-0.5 bg-surface-container-highest font-label text-[10px] uppercase text-on-surface-variant">{tag}</span>
+        ))}
+      </div>
+      <div className="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+        <div className="flex gap-4">
+          <div className="flex flex-col">
+            <span className="font-label text-[9px] uppercase tracking-tighter text-on-surface-variant">Status</span>
+            <span className={`font-label text-xs uppercase ${prompt.type === 'Verified_Protocol' ? 'text-tertiary' : 'text-on-surface'}`}>
+              {prompt.status} {prompt.statusValue}
+            </span>
           </div>
-          <CardDescription className="line-clamp-2 mt-1 text-sm text-[#acabaa]">
-            {prompt.description}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex-1 pt-0 space-y-3">
-          <div className="bg-[#131313] p-3 font-mono text-xs whitespace-pre-wrap line-clamp-3 text-[#e7e5e4]">
-            {truncate(prompt.content, 120)}
-          </div>
-
-          {/* Quick Actions - no divider, use spacing */}
-          <div className="flex items-center justify-between pt-2">
-            <div className="flex items-center gap-1 text-xs text-[#acabaa]">
-              <span className="bg-[#3c3b3b] text-[#c1bfbe] px-1.5 py-0.5 text-xs uppercase tracking-wide">
-                {prompt.category}
-              </span>
-              <span className="flex items-center gap-1 ml-1">
-                <Calendar className="h-3 w-3" />
-                {formatDate(prompt.createdAt)}
-              </span>
-            </div>
-          </div>
-
-          {/* Vote & Action Buttons */}
-          <div className="flex items-center justify-between pt-2">
-            <VoteButtons
-              promptId={prompt.id}
-              worksCount={prompt.worksCount || 0}
-              doesntWorkCount={prompt.doesntWorkCount || 0}
-              onVote={onVote}
-            />
-            <div className="flex items-center gap-1">
-              <BookmarkButton promptId={prompt.id} variant="ghost" size="sm" />
-              <Button variant="ghost" size="sm" className="gap-1 h-8 px-2" onClick={handlePlaygroundClick}>
-                <Play className="h-3 w-3" />
-                <span className="text-xs">Test</span>
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <PromptModal
-        prompt={prompt}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onVote={onVote}
-      />
-    </>
+        </div>
+        <div className="flex gap-2">
+          <button 
+            className="p-2 bg-surface-container-highest hover:bg-tertiary/10 text-on-surface transition-colors"
+            onClick={(e) => { e.stopPropagation(); }}
+          >
+            <GitFork size={18} />
+          </button>
+          <button 
+            className="px-4 py-2 bg-surface-bright font-label text-xs uppercase tracking-widest hover:bg-on-surface hover:text-background transition-colors flex items-center gap-2"
+            onClick={(e) => { e.stopPropagation(); onRun(prompt); }}
+          >
+            <Play size={12} fill="currentColor" />
+            Run
+          </button>
+        </div>
+      </div>
+    </motion.article>
   );
-}
+};

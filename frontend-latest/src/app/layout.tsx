@@ -1,25 +1,10 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
-import { QueryProvider } from '@/lib/providers';
-import { Toaster } from '@/components/ui/toaster';
-import { Header } from '@/components/Header';
-import { Loader2 } from 'lucide-react';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Prompt Verse - AI Prompt Library',
-  description: 'Share, test, and discover AI prompts',
+  title: 'Prompt Hub - Engineered for Precision',
+  description: 'Curated repository of precision engineered language models protocols',
 };
-
-function LoadingSpinner() {
-  return (
-    <div className="flex items-center justify-center py-12">
-      <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-    </div>
-  );
-}
 
 export default function RootLayout({
   children,
@@ -28,19 +13,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <QueryProvider>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <footer className="py-6 bg-gradient-to-t from-[#ff4500] via-[rgba(255,69,0,0.4)] to-transparent">
-              <div className="container mx-auto px-4 text-center text-sm text-[#e7e5e4]">
-                Prompt Verse - A place to share and test AI prompts
-              </div>
-            </footer>
-          </div>
-          <Toaster />
-        </QueryProvider>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+      </head>
+      <body>
+        {children}
       </body>
     </html>
   );

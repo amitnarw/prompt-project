@@ -1,189 +1,54 @@
 @import "tailwindcss";
-
 @theme {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, monospace;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "Manrope", sans-serif;
+  --font-label: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Void Grid - High-End Editorial Technicality */
-  /* Background & Surface */
   --color-background: #0e0e0e;
-  --color-foreground: #e7e5e4;
   --color-surface: #0e0e0e;
-  --color-surface-bright: #2c2c2c;
-  --color-surface-container: #191a1a;
   --color-surface-container-low: #131313;
-  --color-surface-container-lowest: #000000;
+  --color-surface-container: #191a1a;
   --color-surface-container-high: #1f2020;
   --color-surface-container-highest: #262626;
-  --color-surface-dim: #0e0e0e;
-  --color-surface-variant: #262626;
-  --color-surface-tint: #ffb5a0;
-
-  /* Primary - Orange accent */
-  --color-primary: #ffb5a0;
-  --color-primary-container: #872000;
-  --color-primary-fixed: #ffdbd1;
-  --color-primary-fixed-dim: #ffc8b9;
-  --color-on-primary: #7c1d00;
-  --color-on-primary-container: #ffc2b2;
-  --color-on-primary-fixed: #7a1c00;
-  --color-on-primary-fixed-variant: #ac2c00;
-  --color-primary-dim: #ffa086;
-
-  /* Secondary */
-  --color-secondary: #9f9d9d;
-  --color-secondary-container: #3c3b3b;
-  --color-secondary-fixed: #e5e2e1;
-  --color-secondary-fixed-dim: #d6d4d3;
-  --color-on-secondary: #202020;
-  --color-on-secondary-container: #c1bfbe;
-  --color-on-secondary-fixed: #403f3f;
-  --color-on-secondary-fixed-variant: #5c5b5b;
-  --color-secondary-dim: #9f9d9d;
-
-  /* Tertiary - Greenish glow */
+  --color-surface-bright: #2c2c2c;
+  --color-on-surface: #e7e5e4;
+  --color-on-surface-variant: #acabaa;
+  --color-outline-variant: #484848;
   --color-tertiary: #eaffeb;
   --color-tertiary-container: #dcf0dd;
-  --color-tertiary-fixed: #e5f9e6;
-  --color-tertiary-fixed-dim: #d6ebd8;
-  --color-on-tertiary: #516355;
-  --color-on-tertiary-container: #495b4d;
-  --color-on-tertiary-fixed: #3c4e40;
-  --color-on-tertiary-fixed-variant: #586b5c;
-  --color-tertiary-dim: #dcf0dd;
-
-  /* Muted */
-  --color-muted: #3c3b3b;
-  --color-muted-foreground: #acabaa;
-
-  /* Accent */
-  --color-accent: #3c3b3b;
-  --color-accent-foreground: #e7e5e4;
-
-  /* Error */
-  --color-error: #ee7d77;
-  --color-error-container: #7f2927;
-  --color-error-dim: #bb5551;
-  --color-on-error: #490106;
-  --color-on-error-container: #ff9993;
-
-  /* Borders & Lines */
-  --color-border: #484848;
-  --color-outline: #767575;
-  --color-outline-variant: #484848;
-  --color-input: #484848;
-  --color-ring: #ffb5a0;
-
-  /* Inverse */
-  --color-inverse-surface: #fcf8f8;
-  --color-inverse-on-surface: #565554;
-  --color-inverse-primary: #b22e00;
-
-  /* Radius - ZERO for grid based */
-  --radius: 0px;
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
+  --color-primary: #ffb5a0;
+  --color-accent-orange: #ff4500;
 }
 
 @layer base {
-  *,
-  *::before,
-  *::after {
-    border-color: var(--color-outline-variant);
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
-  }
-
-  /* Grid Overlay - 12 column at 5% opacity */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image:
+    @apply bg-background text-on-surface font-sans antialiased selection:bg-tertiary-container selection:text-black;
+    background-image: 
       linear-gradient(to right, rgba(72, 72, 72, 0.05) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(72, 72, 72, 0.05) 1px, transparent 1px);
     background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
   }
-}
 
-/* Ghost Border - 15% opacity outline_variant */
-.ghost-border {
-  border: 1px solid rgba(72, 72, 72, 0.15);
-}
-
-/* Card glow effect - tertiary radial glow */
-.card-glow {
-  position: relative;
-}
-
-.card-glow::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(220, 240, 221, 0.08) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Footer gradient - #FF4500 to background */
-.footer-gradient {
-  background: linear-gradient(to top, #ff4500 0%, rgba(255, 69, 0, 0.5) 50%, transparent 100%);
+  * {
+    @apply border-0 rounded-none;
+  }
 }
 
 @layer utilities {
-  .container {
-    width: 100%;
-    margin-inline: auto;
-    padding-inline: 1rem;
-    position: relative;
-    z-index: 1;
+  .radial-glow {
+    background: radial-gradient(circle at 50% 50%, rgba(220, 240, 221, 0.05) 0%, rgba(14, 14, 14, 0) 70%);
+  }
+  
+  .glow-overlay {
+    background: radial-gradient(circle at center, rgba(220, 240, 221, 0.08) 0%, transparent 70%);
   }
 
-  @media (min-width: 640px) {
-    .container {
-      max-width: 640px;
-    }
+  .ghost-border {
+    outline: 1px solid rgba(72, 72, 72, 0.15);
   }
 
-  @media (min-width: 768px) {
-    .container {
-      max-width: 768px;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .container {
-      max-width: 1024px;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .container {
-      max-width: 1280px;
-    }
-  }
-
-  @media (min-width: 1400px) {
-    .container {
-      max-width: 1400px;
-    }
+  .footer-gradient {
+    background: linear-gradient(to t, var(--color-accent-orange) 0%, rgba(255, 69, 0, 0.2) 20%, transparent 100%);
   }
 }
