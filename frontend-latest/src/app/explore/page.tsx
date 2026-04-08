@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { AnimatePresence } from 'motion/react';
 
-export default function HomePage() {
+export default function ExplorePageWrapper() {
   const router = useRouter();
   const [selectedPrompt, setSelectedPrompt] = useState<PromptProtocol | null>(null);
 
@@ -20,7 +20,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar activeTab="home" onTabChange={(tab) => router.push(tab === 'home' ? '/' : `/${tab}`)} />
+      <Navbar activeTab="explore" onTabChange={(tab) => router.push(tab === 'home' ? '/' : `/${tab}`)} />
       <div className="flex-grow">
         <ExplorePage
           onPromptClick={setSelectedPrompt}

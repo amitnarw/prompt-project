@@ -22,8 +22,6 @@ export const PromptModal: React.FC<PromptModalProps> = ({ prompt, onClose, onRun
   const [forkSuccess, setForkSuccess] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  if (!prompt) return null;
-
   const copyPrompt = async () => {
     await navigator.clipboard.writeText(prompt.systemPrompt);
     setCopied(true);
@@ -80,9 +78,17 @@ export const PromptModal: React.FC<PromptModalProps> = ({ prompt, onClose, onRun
   const worksPercent = totalVotes > 0 ? Math.round((worksCount / totalVotes) * 100) : 0;
   const doesntWorkPercent = totalVotes > 0 ? Math.round((doesntWorkCount / totalVotes) * 100) : 0;
 
+  if (!prompt) return null;
+
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-12">
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={prompt.id}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-12"
+      >
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -265,7 +271,7 @@ export const PromptModal: React.FC<PromptModalProps> = ({ prompt, onClose, onRun
             </button>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </AnimatePresence>
   );
 };

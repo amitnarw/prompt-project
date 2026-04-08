@@ -124,7 +124,7 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ initialPrompt })
         <div className="flex-grow overflow-y-auto px-4 py-4 space-y-1">
           <div className="group p-3 bg-surface-container-high border-l-2 border-tertiary-container/40 cursor-pointer">
             <div className="flex justify-between items-start mb-1">
-              <span className="font-label text-[9px] text-tertiary">ACTIVE_STREAM</span>
+              <span className="font-label text-[9px] text-tertiary">ACTIVE STREAM</span>
               <span className="font-label text-[9px] text-on-surface-variant">
                 {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </span>
@@ -266,8 +266,8 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ initialPrompt })
           {/* Input Panel */}
           <div className="flex-1 flex flex-col border-r border-outline-variant/10">
             <div className="p-3 bg-surface-container-low flex justify-between items-center">
-              <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">System_Prompt.txt</span>
-              <Edit size={12} className="opacity-40" />
+              <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">System Prompt.txt</span>
+              <Edit size={12} className="opacity-40 cursor-pointer" />
             </div>
             <textarea
               className="flex-grow bg-surface-container-lowest p-8 font-mono text-sm leading-relaxed overflow-y-auto outline-none resize-none text-on-surface"
@@ -282,11 +282,11 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ initialPrompt })
           <div className="flex-1 flex flex-col bg-surface-container-low">
             <div className="p-3 bg-surface-container flex justify-between items-center">
               <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
-                Response_Stream [RAW]
+                Response Stream [RAW]
               </span>
               <div className="flex gap-3 items-center">
                 <span className={`w-2 h-2 ${isExecuting ? 'bg-tertiary animate-pulse' : output ? 'bg-tertiary/60' : 'bg-tertiary/20'}`}></span>
-                <button onClick={copyOutput} className="opacity-40 hover:opacity-100 transition-opacity">
+                <button onClick={copyOutput} className="opacity-40 hover:opacity-100 transition-opacity cursor-pointer">
                   {copied ? <CheckCircle2 size={12} className="text-tertiary" /> : <Copy size={12} />}
                 </button>
               </div>
@@ -298,7 +298,7 @@ export const PlaygroundPage: React.FC<PlaygroundPageProps> = ({ initialPrompt })
                     <div className="p-4 bg-surface-container-highest/30 border border-outline-variant/20 mb-6">
                       <div className="flex items-center gap-2 mb-3 text-tertiary">
                         <Terminal size={14} />
-                        <span className="text-[10px] font-label uppercase tracking-widest">Inference_Engine_v4</span>
+                        <span className="text-[10px] font-label uppercase tracking-widest">Inference Engine v4</span>
                         {result?.mock && (
                           <span className="ml-auto text-[9px] text-on-surface-variant uppercase tracking-widest px-2 py-0.5 bg-surface-container-highest">
                             Mock Response

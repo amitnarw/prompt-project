@@ -24,10 +24,8 @@
 @layer base {
   body {
     @apply bg-background text-on-surface font-sans antialiased selection:bg-tertiary-container selection:text-black;
-    background-image: 
-      linear-gradient(to right, rgba(72, 72, 72, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(72, 72, 72, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-image: linear-gradient(to right, rgba(72, 72, 72, 0.07) 2px, transparent 1px);
+    background-size: 100px 100px;
   }
 
   * {
@@ -36,10 +34,24 @@
 }
 
 @layer utilities {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface-container-low);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-outline-variant);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-on-surface-variant);
+  }
+
   .radial-glow {
     background: radial-gradient(circle at 50% 50%, rgba(220, 240, 221, 0.05) 0%, rgba(14, 14, 14, 0) 70%);
   }
-  
+
   .glow-overlay {
     background: radial-gradient(circle at center, rgba(220, 240, 221, 0.08) 0%, transparent 70%);
   }
@@ -50,5 +62,34 @@
 
   .footer-gradient {
     background: linear-gradient(to t, var(--color-accent-orange) 0%, rgba(255, 69, 0, 0.2) 20%, transparent 100%);
+  }
+}
+
+/* Page Transitions */
+.page-transition-wrapper {
+  animation: pageIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pageIn {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+    clip-path: inset(10% 0 0 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: inset(0% 0 0 0);
+  }
+}
+
+@keyframes pageOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px);
   }
 }
