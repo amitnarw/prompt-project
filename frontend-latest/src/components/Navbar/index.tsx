@@ -85,7 +85,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
                 {mode === 'signin' ? 'Access the playground and manage prompts' : 'Join the Prompt Hub community'}
               </p>
             </div>
-            <button onClick={onClose} className="text-on-surface-variant hover:text-white transition-colors mt-1 cursor-pointer">
+            <button onClick={onClose} className="text-on-surface-variant hover:text-on-surface transition-colors mt-1 cursor-pointer">
               <X size={20} />
             </button>
           </div>
@@ -159,7 +159,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(s => !s)}
-                  className="absolute right-3 text-on-surface-variant hover:text-white transition-colors cursor-pointer"
+                  className="absolute right-3 text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
                 >
                   {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
@@ -184,7 +184,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
           <div className="mt-6 text-center">
             <button
               onClick={() => { setMode(m => m === 'signin' ? 'signup' : 'signin'); setError(''); }}
-              className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant hover:text-white transition-colors cursor-pointer"
+              className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
             >
               {mode === 'signin' ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
             </button>
@@ -242,7 +242,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navItems, user
             {/* Close button */}
             <button
               onClick={onClose}
-              className="absolute top-6 right-6 text-on-surface-variant hover:text-white transition-colors cursor-pointer"
+              className="absolute top-6 right-6 text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
             >
               <X size={24} />
             </button>
@@ -260,7 +260,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navItems, user
                     <Link
                       href={item.href}
                       onClick={onClose}
-                      className="block py-4 px-4 font-headline text-2xl font-bold uppercase tracking-tight text-white hover:text-tertiary transition-colors border-b border-outline-variant/5"
+                      className="block py-4 px-4 font-headline text-2xl font-bold uppercase tracking-tight text-on-surface hover:text-primary transition-colors border-b border-outline-variant/5"
                     >
                       {item.label}
                     </Link>
@@ -272,14 +272,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navItems, user
               <div className="mt-8 pt-8 border-t border-outline-variant/10 flex flex-col gap-2">
                 <button
                   onClick={() => { onSettingsClick(); onClose(); }}
-                  className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-colors cursor-pointer"
+                  className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer"
                 >
                   <Settings size={18} />
                   <span className="font-label text-xs uppercase tracking-widest">Settings</span>
                 </button>
                 <button
                   onClick={() => { onToggleDarkMode(); onClose(); }}
-                  className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-colors cursor-pointer"
+                  className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer"
                 >
                   {darkMode ? <Sun size={18} /> : <Moon size={18} />}
                   <span className="font-label text-xs uppercase tracking-widest">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
@@ -299,13 +299,13 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navItems, user
                         </div>
                       )}
                       <div>
-                        <p className="font-label text-sm text-white">{user.name || 'User'}</p>
+                        <p className="font-label text-sm text-on-surface">{user.name || 'User'}</p>
                         <p className="font-label text-xs text-on-surface-variant">{user.email}</p>
                       </div>
                     </div>
                     <button
                       onClick={() => { onSignOut(); onClose(); }}
-                      className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-colors cursor-pointer"
+                      className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer"
                     >
                       <LogOut size={18} />
                       <span className="font-label text-xs uppercase tracking-widest">Sign Out</span>
@@ -339,14 +339,36 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange }) => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('theme');
+      if (stored) return stored === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return true;
+  });
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Load session on mount
+  // Apply dark class and load session on mount
   useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
     getSession().then(data => {
       if (data?.user) setUser(data.user);
     });
+  }, []);
+
+  // Track scroll for navbar style change
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 0);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Close user menu on outside click
@@ -383,8 +405,14 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange }) => {
   };
 
   const handleToggleDarkMode = () => {
-    setDarkMode(prev => !prev);
-    document.documentElement.classList.toggle('dark');
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('theme', newMode ? 'dark' : 'light');
+    if (newMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   };
 
   // Nav items based on auth state
@@ -401,10 +429,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange }) => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 md:px-8 h-16 bg-background/95 backdrop-blur-md border-b border-outline-variant/10">
+      <nav className={`sticky top-0 z-50 flex justify-between items-center px-6 md:px-8 h-16 transition-all duration-200 ${scrolled ? 'bg-background/95 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.25)]' : 'bg-transparent'}`}>
         <div className="flex items-center gap-8 md:gap-12">
           <span
-            className="text-lg md:text-xl font-black tracking-tighter text-white font-headline cursor-pointer"
+            className="text-lg md:text-xl font-black tracking-tighter text-on-surface font-headline cursor-pointer"
             onClick={() => router.push('/')}
           >
             PROMPT HUB
@@ -416,8 +444,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange }) => {
                 href={item.href}
                 className={`font-headline uppercase tracking-wider text-sm font-bold transition-colors ${
                   activeTab === item.label.toLowerCase()
-                    ? 'text-white border-b-2 border-tertiary-container/20 pb-1'
-                    : 'text-neutral-500 hover:text-neutral-200'
+                    ? 'text-on-surface border-b-2 border-primary/40 pb-1'
+                    : 'text-on-surface-variant hover:text-on-surface'
                 }`}
               >
                 {item.label}
@@ -429,12 +457,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange }) => {
         <div className="flex items-center gap-3 md:gap-4">
           <button
             onClick={handleToggleDarkMode}
-            className="text-on-surface-variant hover:text-white transition-colors cursor-pointer p-1"
+            className="text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer p-1"
           >
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
-          <button onClick={() => router.push('/settings')} className="text-on-surface-variant hover:text-white transition-colors cursor-pointer p-1">
+          <button onClick={() => router.push('/settings')} className="text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer p-1">
             <Settings size={20} />
           </button>
 
@@ -472,7 +500,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange }) => {
                       <div className="p-2">
                         <button
                           onClick={handleSignOut}
-                          className="w-full flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:text-white hover:bg-surface-container-highest transition-colors cursor-pointer"
+                          className="w-full flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors cursor-pointer"
                         >
                           <LogOut size={14} />
                           <span className="font-label text-[10px] uppercase tracking-widest">Sign Out</span>
@@ -485,7 +513,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange }) => {
             ) : (
               <button
                 onClick={() => setShowAuthModal(true)}
-                className="flex items-center gap-2 px-4 py-1.5 border border-outline-variant/30 font-label text-[10px] uppercase tracking-widest text-on-surface-variant hover:text-white hover:border-outline-variant/60 transition-all cursor-pointer"
+                className="flex items-center gap-2 px-4 py-1.5 border border-outline-variant/30 font-label text-[10px] uppercase tracking-widest text-on-surface-variant hover:text-on-surface hover:border-outline-variant/60 transition-all cursor-pointer"
               >
                 <LogIn size={14} />
                 Sign In
@@ -496,7 +524,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange }) => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setShowMobileMenu(true)}
-            className="md:hidden text-on-surface-variant hover:text-white transition-colors cursor-pointer p-1"
+            className="md:hidden text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer p-1"
           >
             <Menu size={24} />
           </button>

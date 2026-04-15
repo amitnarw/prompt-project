@@ -8,7 +8,6 @@ export default function Template({ children }: { children: React.ReactNode }) {
   const [key, setKey] = useState(pathname);
 
   useEffect(() => {
-    // Small delay to allow exit animation before new page enters
     const timer = setTimeout(() => {
       setKey(pathname);
     }, 50);
@@ -16,7 +15,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   return (
-    <div key={key} className="page-transition-wrapper">
+    <div key={key}>
       {children}
     </div>
   );

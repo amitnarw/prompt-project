@@ -5,6 +5,25 @@
   --font-label: "Space Grotesk", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
+  /* Light mode (default) */
+  --color-background: #fafaf9;
+  --color-surface: #fafaf9;
+  --color-surface-container-low: #f5f5f4;
+  --color-surface-container: #efefed;
+  --color-surface-container-high: #e8e8e6;
+  --color-surface-container-highest: #dcdbd9;
+  --color-surface-bright: #d0cfcd;
+  --color-on-surface: #1c1917;
+  --color-on-surface-variant: #57534e;
+  --color-outline-variant: #a8a29e;
+  --color-tertiary: #166534;
+  --color-tertiary-container: #dcf0dd;
+  --color-primary: #ea580c;
+  --color-accent-orange: #ff4500;
+}
+
+/* Dark mode */
+.dark {
   --color-background: #0e0e0e;
   --color-surface: #0e0e0e;
   --color-surface-container-low: #131313;

@@ -19,7 +19,7 @@ export default function AboutPage() {
   const opacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   return (
-    <div ref={containerRef} className="min-h-screen flex flex-col bg-background overflow-hidden">
+    <div ref={containerRef} className="min-h-screen flex flex-col bg-background overflow-hidden relative">
       <Navbar activeTab="about" onTabChange={(tab) => router.push(tab === 'home' ? '/' : `/${tab}`)} />
 
       <div className="flex-grow relative">
@@ -41,7 +41,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter text-white mb-6"
+              className="font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter text-on-surface mb-6"
             >
               PROMPT HUB
             </motion.h1>
@@ -106,7 +106,7 @@ export default function AboutPage() {
                   viewport={{ once: true }}
                   className="text-center"
                 >
-                  <p className="font-headline text-3xl md:text-5xl font-extrabold text-white mb-2">{stat.number}</p>
+                  <p className="font-headline text-3xl md:text-5xl font-extrabold text-on-surface mb-2">{stat.number}</p>
                   <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">{stat.label}</p>
                 </motion.div>
               ))}
@@ -125,7 +125,7 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, clipPath: "inset(0% 0% 0% 0%)" }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}
-              className="font-headline text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-relaxed mb-8"
+              className="font-headline text-2xl md:text-4xl lg:text-5xl font-bold text-on-surface leading-relaxed mb-8"
             >
               We believe in the power of{' '}
               <span className="text-tertiary">precise communication</span>{' '}
@@ -199,7 +199,7 @@ export default function AboutPage() {
                   <div className="text-tertiary mb-6 group-hover:scale-110 transition-transform duration-300">
                     {feature.icon}
                   </div>
-                  <h3 className="font-headline font-bold text-xl text-white mb-3">{feature.title}</h3>
+                  <h3 className="font-headline font-bold text-xl text-on-surface mb-3">{feature.title}</h3>
                   <p className="text-on-surface-variant text-sm leading-relaxed">{feature.desc}</p>
                 </motion.div>
               ))}
@@ -220,7 +220,7 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="font-headline text-3xl md:text-4xl font-extrabold text-white mb-6"
+              className="font-headline text-3xl md:text-4xl font-extrabold text-on-surface mb-6"
             >
               Ready to Get Started?
             </motion.h2>
